@@ -50,6 +50,18 @@ function 切換職業(jobname) {
 }
 
 var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSplDOktwi4lBhEY3JqBbs5tdF4MrX_wBJ4u28c6IiO8xnhWPOc2FeSVBr7aNlfg4fVzdORQQ-qX0K-/pubhtml';
+var 巴哈討論串 = 'https://forum.gamer.com.tw/C.php?page=1&bsn=7650&snA=995533&to=';
+
+function createa(str, style, width) {
+	let td = creatediv('', style, width);
+	let div = td.getElementsByTagName('div')[0];
+	let a = document.createElement('a');
+	a.href = 巴哈討論串 + str.replace('★', '');
+	a.innerHTML = str;
+	div.append(a);
+	return td;
+}
+
 var 資料表 = [];
 var 地圖經驗表 = [];
 var 沒有資料列 = (() => {
@@ -169,7 +181,7 @@ window.onload = async () => {
 	// console.log(JSON.stringify(地圖經驗表));
 
 	let tr = document.createElement('tr');
-	tr.append(createth('樓層', null, 60));
+	tr.append(createth('巴哈連結', null, 100));
 	tr.append(createth('職業', null, 80));
 	tr.append(createth('地圖', null, 150, () => {
 		排序('地圖');
@@ -214,7 +226,7 @@ window.onload = async () => {
 
 		let r = 資料表[i];
 		let tr = document.createElement('tr');
-		tr.append(creatediv(r.樓層, null, 60));
+		tr.append(createa(r.樓層, null, 100));
 		tr.append(creatediv(r.職業, null, 80));
 		tr.append(creatediv(r.地圖, null, 150));
 		tr.append(creatediv(r.擊殺數, null, 100));
