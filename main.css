@@ -3,6 +3,13 @@ table {
     margin-right: auto;
 }
 
+#十分鐘怪物擊殺數 {
+    text-align : center;
+    font-size  : 30px;
+    font-weight: bold;
+    color      : #008000;
+}
+
 #職業選擇,
 #主要表 {
     vertical-align: top;

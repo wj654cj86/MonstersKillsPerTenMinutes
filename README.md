@@ -1,4 +1,4 @@
-# 十分鐘怪物擊殺量
+# 十分鐘怪物擊殺數
 
 工具網址：https://wj654cj86.github.io/MonstersKillsPerTenMinutes/
 
