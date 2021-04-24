@@ -10,12 +10,30 @@ table {
 }
 
 #職業選擇 {
-    width: 110px;
+    width: 150px;
+}
+
+#編輯選擇區 {
+    font-size  : 20px;
+    font-weight: bold;
+    color      : #ff8000;
 }
 
 select {
     width    : 100px;
     font-size: 15px;
+}
+
+#職業選擇 .橘色 {
+    background-color: #fcc4ee;
+    border          : 1px solid #333;
+    white-space     : nowrap;
+}
+
+#職業選擇 .小標題 {
+    font-size  : 18px;
+    font-weight: bold;
+    color      : #0080ff;
 }
 
 #主要表 table {
