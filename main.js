@@ -64,6 +64,15 @@ function createa(str, style, width) {
 
 var 資料表 = [];
 var 地圖經驗表 = [];
+var 資料載入中 = (() => {
+	let tr = document.createElement('tr');
+	let td = document.createElement('td');
+	td.colSpan = 10;
+	td.innerHTML = '資料載入中......';
+	td.className = '偶數行';
+	tr.append(td);
+	return tr;
+})();
 var 沒有資料列 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
@@ -159,6 +168,26 @@ window.onload = async () => {
 		列出怪物隻數(職業.value);
 	};
 
+	let tr = document.createElement('tr');
+	tr.append(createth('巴哈連結', null, 100));
+	tr.append(createth('職業', null, 80));
+	tr.append(createth('地圖', null, 150, () => {
+		排序('地圖');
+	}));
+	tr.append(createth('擊殺數', null, 100, () => {
+		排序('擊殺數');
+	}));
+	tr.append(createth('經驗值', null, 100, () => {
+		排序('經驗值');
+	}));
+	tr.append(createth('幽暗', null, 60));
+	tr.append(createth('影片', null, 60));
+	tr.append(createth('測試者', null, 150));
+	tr.append(createth('備註', null, 200));
+	tr.append(createth('版本', null, 200));
+	怪物隻數表thead.append(tr);
+	怪物隻數表.append(資料載入中);
+
 	let htmlstr = await promise(openfile, url);
 	let loadtrls = (n) => {
 		let tbodybegin, tbodyend = 0;
@@ -179,25 +208,6 @@ window.onload = async () => {
 		};
 	}
 	// console.log(JSON.stringify(地圖經驗表));
-
-	let tr = document.createElement('tr');
-	tr.append(createth('巴哈連結', null, 100));
-	tr.append(createth('職業', null, 80));
-	tr.append(createth('地圖', null, 150, () => {
-		排序('地圖');
-	}));
-	tr.append(createth('擊殺數', null, 100, () => {
-		排序('擊殺數');
-	}));
-	tr.append(createth('經驗值', null, 100, () => {
-		排序('經驗值');
-	}));
-	tr.append(createth('幽暗', null, 60));
-	tr.append(createth('影片', null, 60));
-	tr.append(createth('測試者', null, 150));
-	tr.append(createth('備註', null, 200));
-	tr.append(createth('版本', null, 200));
-	怪物隻數表thead.append(tr);
 
 	trls = loadtrls(0);
 	for (let i = 0; i < trls.length; i++) {
@@ -240,5 +250,6 @@ window.onload = async () => {
 	}
 	// console.log(JSON.stringify(資料表));
 
+	怪物隻數隱藏表.append(資料載入中);
 	列出怪物隻數(職業.value);
 };
