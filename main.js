@@ -128,7 +128,7 @@ function createth(str, style, width, cb) {
 		th.style.width = width + 'px';
 	if (typeof cb != 'undefined') {
 		let btn = document.createElement('button');
-		btn.innerHTML = '－';
+		btn.innerHTML = '▲';
 		btn.onclick = cb;
 		按鈕[str] = btn;
 		th.append(btn);
@@ -140,7 +140,7 @@ function 排序(key) {
 	順序[key] = !順序[key];
 	for (let k in 按鈕) {
 		if (k == key) continue;
-		按鈕[k].innerHTML = '－';
+		按鈕[k].innerHTML = '▲';
 		順序[k] = true;
 	}
 	if (順序[key]) {
@@ -185,8 +185,8 @@ window.onload = async () => {
 	};
 
 	let tr = document.createElement('tr');
-	tr.append(createth('樓層', null, 100));
-	tr.append(createth('職業', null, 80));
+	tr.append(createth('樓層', null, 60));
+	tr.append(createth('職業', null, 60));
 	tr.append(createth('地圖', null, 150, () => {
 		排序('地圖');
 	}));
@@ -253,8 +253,8 @@ window.onload = async () => {
 
 		let r = 資料表[i];
 		let tr = document.createElement('tr');
-		tr.append(creatediv(r.樓層, null, 100));
-		tr.append(creatediv(r.職業, null, 80));
+		tr.append(creatediv(r.樓層, null, 60));
+		tr.append(creatediv(r.職業, null, 60));
 		tr.append(creatediv(r.地圖, null, 150));
 		tr.append(creatediv(r.擊殺數, null, 100));
 		tr.append(creatediv(r.經驗值 != 0 ? r.經驗值.toFixed(2) + '億' : '未有平均經驗', null, 100));

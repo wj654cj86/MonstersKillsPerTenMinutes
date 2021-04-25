@@ -14,7 +14,7 @@ table {
 }
 
 #職業選擇 {
-    width      : 150px;
+    width      : 250px;
     line-height: 25px;
 }
 
@@ -87,5 +87,5 @@ select {
 }
 
 .奇數行 td {
-    background-color: #ddd;
+    background-color: #ebeff1;
 }
