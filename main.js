@@ -88,6 +88,10 @@ function 列出怪物隻數(jobname) {
 	} else {
 		怪物隻數隱藏表.append(沒有資料列);
 	}
+	for (let k in 按鈕) {
+		按鈕[k].innerHTML = '－';
+		順序[k] = true;
+	}
 	奇偶數行顏色設定();
 }
 
