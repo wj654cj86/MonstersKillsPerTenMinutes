@@ -246,7 +246,7 @@ window.onload = async () => {
 		});
 
 		if (typeof ef == 'undefined')
-			資料表[i].經驗值 = '未有平均經驗'
+			資料表[i].經驗值 = 0;
 		else {
 			資料表[i].經驗值 = (ef.經驗 * 資料表[i].擊殺數 / 1E8).toFixed(2) * 1;
 		}
@@ -257,7 +257,7 @@ window.onload = async () => {
 		tr.append(creatediv(r.職業, null, 80));
 		tr.append(creatediv(r.地圖, null, 150));
 		tr.append(creatediv(r.擊殺數, null, 100));
-		tr.append(creatediv(typeof r.經驗值 == 'number' ? r.經驗值.toFixed(2) + '億' : r.經驗值, null, 100));
+		tr.append(creatediv(r.經驗值 != 0 ? r.經驗值.toFixed(2) + '億' : '未有平均經驗', null, 100));
 		tr.append(creatediv(r.幽暗, null, 60));
 		tr.append(creatediv(r.影片, null, 60));
 		tr.append(creatediv(r.測試者, null, 150));
