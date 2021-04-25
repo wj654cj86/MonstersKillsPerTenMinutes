@@ -7,13 +7,6 @@ table {
     margin-right: auto;
 }
 
-#十分鐘怪物擊殺數 {
-    text-align : center;
-    font-size  : 30px;
-    font-weight: bold;
-    color      : #008000;
-}
-
 #職業選擇,
 #主要表 {
     vertical-align: top;
@@ -21,11 +14,12 @@ table {
 }
 
 #職業選擇 {
-    width: 150px;
+    width      : 150px;
+    line-height: 25px;
 }
 
 #編輯選擇區 {
-    font-size  : 20px;
+    font-size  : 25px;
     font-weight: bold;
     color      : #ff8000;
 }
@@ -36,15 +30,16 @@ select {
 }
 
 #職業選擇 .橘色 {
-    background-color: #fcc4ee;
+    background-color: #134f5c;
     border          : 1px solid #333;
+    color           : #fff;
     white-space     : nowrap;
 }
 
 #職業選擇 .小標題 {
-    font-size  : 18px;
+    font-size  : 25px;
     font-weight: bold;
-    color      : #0080ff;
+    color      : #134f5c;
 }
 
 #主要表 table {
@@ -58,6 +53,7 @@ select {
 #主要表 table th,
 #主要表 table td {
     font-size     : 15px;
+    font-family   : Consolas;
     border        : 1px solid #333;
     padding-left  : 5px;
     padding-right : 5px;
@@ -67,7 +63,17 @@ select {
 }
 
 #主要表 table th {
-    background-color: #fcc4ee;
+    background-color: #134f5c;
+    color           : #fff;
+}
+
+#主要表 table th button {
+    width: 35px;
+    color: #134f5c;
+}
+
+#主要表 table td {
+    color: #222;
 }
 
 #主要表 table td div {
@@ -77,9 +83,9 @@ select {
 }
 
 .偶數行 td {
-    background-color: #ffffff;
+    background-color: #fff;
 }
 
 .奇數行 td {
-    background-color: #bbe9eb;
+    background-color: #ddd;
 }

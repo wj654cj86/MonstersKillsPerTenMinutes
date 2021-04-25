@@ -1,15 +1,3 @@
-function createth(str, style, width, cb) {
-	let th = document.createElement('th');
-	th.innerHTML = str;
-	if (typeof style != 'undefined')
-		th.className = style;
-	if (typeof width != 'undefined')
-		th.style.width = width + 'px';
-	if (typeof cb != 'undefined')
-		th.onclick = cb;
-	return th;
-}
-
 function createtd(str, style) {
 	let td = document.createElement('td');
 	td.innerHTML = str;
@@ -57,7 +45,7 @@ function createa(str, style, width) {
 	let div = td.getElementsByTagName('div')[0];
 	let a = document.createElement('a');
 	a.href = 巴哈討論串 + str.replace('★', '');
-	a.innerHTML = str;
+	a.innerHTML = '移至' + str.replace('★', '') + '樓';
 	div.append(a);
 	return td;
 }
@@ -67,7 +55,7 @@ var 地圖經驗表 = [];
 var 資料載入中 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
-	td.colSpan = 10;
+	td.colSpan = 11;
 	td.innerHTML = '資料載入中......';
 	td.className = '偶數行';
 	tr.append(td);
@@ -76,7 +64,7 @@ var 資料載入中 = (() => {
 var 沒有資料列 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
-	td.colSpan = 10;
+	td.colSpan = 11;
 	td.innerHTML = '暫無資料';
 	td.className = '偶數行';
 	tr.append(td);
@@ -126,10 +114,33 @@ let 順序 = {
 	'擊殺數': true,
 	'經驗值': true
 };
+let 按鈕 = {};
+function createth(str, style, width, cb) {
+	let th = document.createElement('th');
+	th.innerHTML = str + '  ';
+	if (typeof style != 'undefined')
+		th.className = style;
+	if (typeof width != 'undefined')
+		th.style.width = width + 'px';
+	if (typeof cb != 'undefined') {
+		let btn = document.createElement('button');
+		btn.innerHTML = '－';
+		btn.onclick = cb;
+		按鈕[str] = btn;
+		th.append(btn);
+	}
+	return th;
+}
 
 function 排序(key) {
 	順序[key] = !順序[key];
+	for (let k in 按鈕) {
+		if (k == key) continue;
+		按鈕[k].innerHTML = '－';
+		順序[k] = true;
+	}
 	if (順序[key]) {
+		按鈕[key].innerHTML = '▲';
 		顯示.sort((a, b) => {
 			if (a[key] < b[key])
 				return -1;
@@ -139,6 +150,7 @@ function 排序(key) {
 				return 0;
 		});
 	} else {
+		按鈕[key].innerHTML = '▼';
 		顯示.sort((a, b) => {
 			if (a[key] < b[key])
 				return 1;
@@ -169,7 +181,7 @@ window.onload = async () => {
 	};
 
 	let tr = document.createElement('tr');
-	tr.append(createth('巴哈連結', null, 100));
+	tr.append(createth('樓層', null, 100));
 	tr.append(createth('職業', null, 80));
 	tr.append(createth('地圖', null, 150, () => {
 		排序('地圖');
@@ -185,6 +197,7 @@ window.onload = async () => {
 	tr.append(createth('測試者', null, 150));
 	tr.append(createth('備註', null, 200));
 	tr.append(createth('版本', null, 200));
+	tr.append(createth('巴哈連結', null, 100));
 	怪物隻數表thead.append(tr);
 	怪物隻數表.append(資料載入中);
 
@@ -236,7 +249,7 @@ window.onload = async () => {
 
 		let r = 資料表[i];
 		let tr = document.createElement('tr');
-		tr.append(createa(r.樓層, null, 100));
+		tr.append(creatediv(r.樓層, null, 100));
 		tr.append(creatediv(r.職業, null, 80));
 		tr.append(creatediv(r.地圖, null, 150));
 		tr.append(creatediv(r.擊殺數, null, 100));
@@ -246,6 +259,7 @@ window.onload = async () => {
 		tr.append(creatediv(r.測試者, null, 150));
 		tr.append(creatediv(r.備註, null, 200));
 		tr.append(creatediv(r.版本, null, 200));
+		tr.append(createa(r.樓層, null, 100));
 		r.html = tr;
 	}
 	// console.log(JSON.stringify(資料表));
