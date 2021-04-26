@@ -185,8 +185,8 @@ window.onload = async () => {
 	};
 
 	let tr = document.createElement('tr');
-	tr.append(createth('樓層', null, 60));
-	tr.append(createth('職業', null, 60));
+	tr.append(createth('樓層', null, 70));
+	tr.append(createth('職業', null, 90));
 	tr.append(createth('地圖', null, 150, () => {
 		排序('地圖');
 	}));
@@ -253,8 +253,8 @@ window.onload = async () => {
 
 		let r = 資料表[i];
 		let tr = document.createElement('tr');
-		tr.append(creatediv(r.樓層, null, 60));
-		tr.append(creatediv(r.職業, null, 60));
+		tr.append(creatediv(r.樓層, null, 70));
+		tr.append(creatediv(r.職業, null, 90));
 		tr.append(creatediv(r.地圖, null, 150));
 		tr.append(creatediv(r.擊殺數, null, 100));
 		tr.append(creatediv(r.經驗值 != 0 ? r.經驗值.toFixed(2) + '億' : '未有平均經驗', null, 100));

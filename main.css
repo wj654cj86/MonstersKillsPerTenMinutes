@@ -1,91 +1,91 @@
 html {
-    overflow-y: scroll;
+	overflow-y: scroll;
 }
 
 table {
-    margin-left : auto;
-    margin-right: auto;
+	margin-left : auto;
+	margin-right: auto;
 }
 
 #職業選擇,
 #主要表 {
-    vertical-align: top;
-    font-size     : 15px;
+	vertical-align: top;
+	font-size     : 15px;
 }
 
 #職業選擇 {
-    width      : 250px;
-    line-height: 25px;
+	width      : 250px;
+	line-height: 25px;
 }
 
 #編輯選擇區 {
-    font-size  : 25px;
-    font-weight: bold;
-    color      : #ff8000;
+	font-size  : 25px;
+	font-weight: bold;
+	color      : #ff8000;
 }
 
 select {
-    width    : 100px;
-    font-size: 15px;
+	width    : 100px;
+	font-size: 15px;
 }
 
 #職業選擇 .橘色 {
-    background-color: #134f5c;
-    border          : 1px solid #333;
-    color           : #fff;
-    white-space     : nowrap;
+	background-color: #134f5c;
+	border          : 1px solid #333;
+	color           : #fff;
+	white-space     : nowrap;
 }
 
 #職業選擇 .小標題 {
-    font-size  : 25px;
-    font-weight: bold;
-    color      : #134f5c;
+	font-size  : 25px;
+	font-weight: bold;
+	color      : #134f5c;
 }
 
 #主要表 table {
-    text-align    : center;
-    margin-left   : auto;
-    margin-right  : auto;
-    border-spacing: 0px;
-    border        : 1px solid #333;
+	text-align    : center;
+	margin-left   : auto;
+	margin-right  : auto;
+	border-spacing: 0px;
+	border        : 1px solid #333;
 }
 
 #主要表 table th,
 #主要表 table td {
-    font-size     : 15px;
-    font-family   : Consolas;
-    border        : 1px solid #333;
-    padding-left  : 5px;
-    padding-right : 5px;
-    padding-top   : 1px;
-    padding-bottom: 1px;
-    white-space   : nowrap;
+	font-size     : 15px;
+	font-family   : Consolas;
+	border        : 1px solid #333;
+	padding-left  : 1px;
+	padding-right : 1px;
+	padding-top   : 1px;
+	padding-bottom: 1px;
+	white-space   : nowrap;
 }
 
 #主要表 table th {
-    background-color: #134f5c;
-    color           : #fff;
+	background-color: #134f5c;
+	color           : #fff;
 }
 
 #主要表 table th button {
-    width: 35px;
-    color: #134f5c;
+	width: 35px;
+	color: #134f5c;
 }
 
 #主要表 table td {
-    color: #222;
+	color: #222;
 }
 
 #主要表 table td div {
-    padding    : 0px;
-    overflow   : hidden;
-    white-space: nowrap;
+	padding    : 0px;
+	overflow   : hidden;
+	white-space: nowrap;
 }
 
 .偶數行 td {
-    background-color: #fff;
+	background-color: #fff;
 }
 
 .奇數行 td {
-    background-color: #ebeff1;
+	background-color: #ebeff1;
 }
