@@ -2,6 +2,14 @@ html {
 	overflow-y: scroll;
 }
 
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 table {
 	margin-left : auto;
 	margin-right: auto;

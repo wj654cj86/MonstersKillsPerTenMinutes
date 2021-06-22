@@ -19,7 +19,7 @@ function creatediv(str, style, width) {
 var job = {
 	'劍士': ['英雄', '聖騎士', '黑騎士', '聖魂劍士', '米哈逸', '狂狼勇士', '爆拳槍神', '惡魔殺手', '惡魔復仇者', '凱薩', '神之子', '阿戴爾', '劍豪', '皮卡啾'],
 	'法師': ['火毒', '冰雷', '主教', '烈焰巫師', '龍魔導士', '夜光', '煉獄巫師', '凱內西斯', '伊利恩', '陰陽師', '幻獸師'],
-	'弓箭手': ['箭神', '神射手', '開拓者', '破風使者', '精靈遊俠', '狂豹獵人', '卡音'],
+	'弓箭手': ['箭神', '神射手', '開拓者', '破風使者', '精靈遊俠', '狂豹獵人', '凱殷'],
 	'盜賊': ['夜使者', '暗影神偷', '影武者', '暗夜行者', '幻影俠盜', '傑諾', '卡蒂娜', '虎影'],
 	'海盜': ['拳霸', '槍神', '重砲指揮官', '閃雷悍將', '隱月', '機甲戰神', '傑諾', '天使破壞者', '亞克', '墨玄', '雪吉拉', '蒼龍俠客']
 };
@@ -206,17 +206,9 @@ window.onload = async () => {
 	怪物隻數表.append(資料載入中);
 
 	let htmlstr = await promise(openfile, url);
-	let loadtrls = (n) => {
-		let tbodybegin, tbodyend = 0;
-		for (let i = 0; i < n; i++) {
-			tbodyend = htmlstr.indexOf('</tbody>', tbodyend) + '</tbody>'.length;
-		}
-		tbodybegin = htmlstr.indexOf('<tbody>', tbodyend);
-		tbodyend = htmlstr.indexOf('</tbody>', tbodyend) + '</tbody>'.length;
-		return text2xml(htmlstr.slice(tbodybegin, tbodyend)).getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-	};
-	let trls = loadtrls(1);
+	let tbodyls = text2xml(htmlstr.slice(htmlstr.indexOf('<body'), htmlstr.indexOf('</body>') + '</body>'.length)).getElementsByTagName('body')[0].getElementsByTagName('tbody');
 
+	let trls = tbodyls[1].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
 		let tdls = trls[i].getElementsByTagName('td');
 		地圖經驗表[i] = {
@@ -226,7 +218,7 @@ window.onload = async () => {
 	}
 	// console.log(JSON.stringify(地圖經驗表));
 
-	trls = loadtrls(0);
+	trls = tbodyls[0].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
 		let tdls = trls[i].getElementsByTagName('td');
 		資料表[i] = {
@@ -248,7 +240,7 @@ window.onload = async () => {
 		if (typeof ef == 'undefined')
 			資料表[i].經驗值 = 0;
 		else {
-			資料表[i].經驗值 = (ef.經驗 * 資料表[i].擊殺數 / 1E8).toFixed(2) * 1;
+			資料表[i].經驗值 = ef.經驗 * 資料表[i].擊殺數;
 		}
 
 		let r = 資料表[i];
@@ -257,7 +249,7 @@ window.onload = async () => {
 		tr.append(creatediv(r.職業, null, 90));
 		tr.append(creatediv(r.地圖, null, 150));
 		tr.append(creatediv(r.擊殺數, null, 100));
-		tr.append(creatediv(r.經驗值 != 0 ? r.經驗值.toFixed(2) + '億' : '未有平均經驗', null, 100));
+		tr.append(creatediv(r.經驗值 != 0 ? (r.經驗值 / 1E8).toFixed(2) + '億' : '未有平均經驗', null, 100));
 		tr.append(creatediv(r.幽暗, null, 60));
 		tr.append(creatediv(r.影片, null, 60));
 		tr.append(creatediv(r.測試者, null, 150));
