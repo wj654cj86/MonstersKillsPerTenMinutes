@@ -93,6 +93,121 @@ function 列出怪物隻數(jobname) {
 		順序[k] = true;
 	}
 	奇偶數行顏色設定();
+	顯示經驗總值();
+}
+
+var 等差經驗增量 = [
+	{ '等級': 40, '經驗': 0.7 },
+	{ '等級': 39, '經驗': 0.71 },
+	{ '等級': 38, '經驗': 0.72 },
+	{ '等級': 37, '經驗': 0.73 },
+	{ '等級': 36, '經驗': 0.74 },
+	{ '等級': 35, '經驗': 0.75 },
+	{ '等級': 34, '經驗': 0.76 },
+	{ '等級': 33, '經驗': 0.77 },
+	{ '等級': 32, '經驗': 0.78 },
+	{ '等級': 31, '經驗': 0.79 },
+	{ '等級': 30, '經驗': 0.8 },
+	{ '等級': 29, '經驗': 0.81 },
+	{ '等級': 28, '經驗': 0.82 },
+	{ '等級': 27, '經驗': 0.83 },
+	{ '等級': 26, '經驗': 0.84 },
+	{ '等級': 25, '經驗': 0.85 },
+	{ '等級': 24, '經驗': 0.86 },
+	{ '等級': 23, '經驗': 0.87 },
+	{ '等級': 22, '經驗': 0.88 },
+	{ '等級': 21, '經驗': 0.89 },
+	{ '等級': 19, '經驗': 0.95 },
+	{ '等級': 17, '經驗': 0.96 },
+	{ '等級': 15, '經驗': 0.97 },
+	{ '等級': 13, '經驗': 0.98 },
+	{ '等級': 11, '經驗': 0.99 },
+	{ '等級': 10, '經驗': 1 },
+	{ '等級': 5, '經驗': 1.05 },
+	{ '等級': 2, '經驗': 1.1 },
+	{ '等級': -1, '經驗': 1.2 },
+	{ '等級': -4, '經驗': 1.1 },
+	{ '等級': -9, '經驗': 1.05 },
+	{ '等級': -10, '經驗': 1 },
+	{ '等級': -11, '經驗': 0.99 },
+	{ '等級': -12, '經驗': 0.98 },
+	{ '等級': -13, '經驗': 0.97 },
+	{ '等級': -14, '經驗': 0.96 },
+	{ '等級': -15, '經驗': 0.95 },
+	{ '等級': -16, '經驗': 0.94 },
+	{ '等級': -17, '經驗': 0.93 },
+	{ '等級': -18, '經驗': 0.92 },
+	{ '等級': -19, '經驗': 0.91 },
+	{ '等級': -20, '經驗': 0.9 },
+	{ '等級': -21, '經驗': 0.7 },
+	{ '等級': -22, '經驗': 0.64 },
+	{ '等級': -23, '經驗': 0.62 },
+	{ '等級': -24, '經驗': 0.58 },
+	{ '等級': -25, '經驗': 0.54 },
+	{ '等級': -26, '經驗': 0.50 },
+	{ '等級': -27, '經驗': 0.46 },
+	{ '等級': -28, '經驗': 0.42 },
+	{ '等級': -29, '經驗': 0.38 },
+	{ '等級': -30, '經驗': 0.34 },
+	{ '等級': -31, '經驗': 0.3 },
+	{ '等級': -32, '經驗': 0.26 },
+	{ '等級': -33, '經驗': 0.22 },
+	{ '等級': -34, '經驗': 0.18 },
+	{ '等級': -35, '經驗': 0.14 },
+	{ '等級': -39, '經驗': 0.10 },
+	{ '等級': -301, '經驗': 0 }
+];
+
+function 顯示經驗總值() {
+	let 等級 = 玩家等級.value;
+	if (isNaN(等級) || 等級 < 200) {
+		玩家等級錯誤.innerHTML = '玩家等級錯誤';
+		return;
+	}
+	玩家等級錯誤.innerHTML = '';
+	for (let i = 0; i < 顯示.length; i++) {
+		if (typeof 顯示[i].地圖經驗 == 'undefined') {
+			顯示[i].經驗html.innerHTML = '未有地圖經驗';
+			顯示[i].經驗值 = 0;
+			continue;
+		}
+		// console.log(JSON.stringify(顯示[i].地圖經驗));
+		let 等級差 = 等級 - 顯示[i].地圖經驗.A怪.等級;
+		let j;
+		for (j = 0; j < 等差經驗增量.length; j++) {
+			if (等級差 >= 等差經驗增量[j].等級) {
+				break;
+			}
+		}
+		let 經驗 = 顯示[i].地圖經驗.A怪.經驗 * 等差經驗增量[j].經驗;
+		if (typeof 顯示[i].地圖經驗.B怪 != 'undefined') {
+			等級差 = 等級 - 顯示[i].地圖經驗.B怪.等級;
+			for (j = 0; j < 等差經驗增量.length; j++) {
+				if (等級差 >= 等差經驗增量[j].等級) {
+					break;
+				}
+			}
+			經驗 = (經驗 + 顯示[i].地圖經驗.B怪.經驗 * 等差經驗增量[j].經驗) / 2;
+		}
+		顯示[i].經驗值 = 經驗;
+		let 經驗字串 = (經驗 * 顯示[i].擊殺數).toFixed(0);
+		let 經驗2 = 經驗字串 * 1;
+		let 顯示字串 = '';
+		if (經驗2 > 1E8 - 1) {
+			顯示字串 += 經驗字串.slice(0, -8) + '億';
+		}
+		if (經驗2 > 1E4 - 1) {
+			顯示字串 += 經驗字串.slice(-8, -4) + '萬';
+		}
+		if (經驗2 > 0) {
+			顯示字串 += 經驗字串.slice(-4);
+		}
+		if (經驗2 == 0) {
+			顯示字串 = 0;
+		}
+
+		顯示[i].經驗html.innerHTML = 顯示字串;
+	}
 }
 
 function 奇偶數行顏色設定() {
@@ -208,13 +323,22 @@ window.onload = async () => {
 	let htmlstr = await promise(openfile, url);
 	let tbodyls = text2xml(htmlstr.slice(htmlstr.indexOf('<body'), htmlstr.indexOf('</body>') + '</body>'.length)).getElementsByTagName('body')[0].getElementsByTagName('tbody');
 
-	let trls = tbodyls[1].getElementsByTagName('tr');
+	let trls = tbodyls[2].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
 		let tdls = trls[i].getElementsByTagName('td');
 		地圖經驗表[i] = {
 			'地圖': tdls[0].innerHTML,
-			'經驗': tdls[1].innerHTML
+			'A怪': {
+				'等級': tdls[1].innerHTML,
+				'經驗': tdls[2].innerHTML
+			}
 		};
+		if (tdls[3].innerHTML != '') {
+			地圖經驗表[i].B怪 = {
+				'等級': tdls[3].innerHTML,
+				'經驗': tdls[4].innerHTML
+			}
+		}
 	}
 	// console.log(JSON.stringify(地圖經驗表));
 
@@ -233,15 +357,9 @@ window.onload = async () => {
 			'版本': tdls[8].innerHTML
 		};
 
-		let ef = 地圖經驗表.find((e) => {
+		資料表[i].地圖經驗 = 地圖經驗表.find((e) => {
 			return e.地圖 == 資料表[i].地圖;
 		});
-
-		if (typeof ef == 'undefined')
-			資料表[i].經驗值 = 0;
-		else {
-			資料表[i].經驗值 = ef.經驗 * 資料表[i].擊殺數;
-		}
 
 		let r = 資料表[i];
 		let tr = document.createElement('tr');
@@ -249,7 +367,10 @@ window.onload = async () => {
 		tr.append(creatediv(r.職業, null, 90));
 		tr.append(creatediv(r.地圖, null, 150));
 		tr.append(creatediv(r.擊殺數, null, 100));
-		tr.append(creatediv(r.經驗值 != 0 ? (r.經驗值 / 1E8).toFixed(2) + '億' : '未有平均經驗', null, 100));
+
+		r.經驗html = creatediv('', null, 100);
+		tr.append(r.經驗html);
+
 		tr.append(creatediv(r.幽暗, null, 60));
 		tr.append(creatediv(r.影片, null, 60));
 		tr.append(creatediv(r.測試者, null, 150));
@@ -259,7 +380,9 @@ window.onload = async () => {
 		r.html = tr;
 	}
 	// console.log(JSON.stringify(資料表));
-
+	玩家等級.onchange = () => {
+		顯示經驗總值();
+	};
 	怪物隻數隱藏表.append(資料載入中);
 	列出怪物隻數(職業.value);
 };

@@ -32,9 +32,15 @@ table {
 	color      : #ff8000;
 }
 
-select {
+select,
+input[type=text] {
 	width    : 100px;
 	font-size: 15px;
+}
+
+#玩家等級錯誤 {
+	font-weight: bold;
+	color      : #f00;
 }
 
 #職業選擇 .橘色 {
