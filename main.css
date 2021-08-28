@@ -1,5 +1,6 @@
 html {
-	overflow-y: scroll;
+	overflow-y : scroll;
+	font-family: Consolas, Microsoft JhengHei;
 }
 
 a {
@@ -67,7 +68,6 @@ input[type=text] {
 #主要表 table th,
 #主要表 table td {
 	font-size     : 15px;
-	font-family   : Consolas;
 	border        : 1px solid #333;
 	padding-left  : 1px;
 	padding-right : 1px;

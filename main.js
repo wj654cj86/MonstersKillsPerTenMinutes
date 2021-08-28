@@ -286,7 +286,7 @@ window.onload = async () => {
 	let tr = document.createElement('tr');
 	tr.append(createth('樓層', null, 70));
 	tr.append(createth('職業', null, 90));
-	tr.append(createth('地圖', null, 150, () => {
+	tr.append(createth('地圖', null, 200, () => {
 		排序('地圖');
 	}));
 	tr.append(createth('擊殺數', null, 100, () => {
@@ -349,7 +349,7 @@ window.onload = async () => {
 		let tr = document.createElement('tr');
 		tr.append(creatediv(r.樓層, null, 70));
 		tr.append(creatediv(r.職業, null, 90));
-		tr.append(creatediv(r.地圖, null, 150));
+		tr.append(creatediv(r.地圖, null, 200));
 		tr.append(creatediv(r.擊殺數, null, 100));
 
 		r.經驗html = creatediv('', null, 100);
