@@ -16,27 +16,6 @@ function creatediv(str, style, width) {
 	return td;
 }
 
-var job = {
-	'劍士': ['英雄', '聖騎士', '黑騎士', '聖魂劍士', '米哈逸', '狂狼勇士', '爆拳槍神', '惡魔殺手', '惡魔復仇者', '凱薩', '神之子', '阿戴爾', '劍豪', '皮卡啾'],
-	'法師': ['火毒', '冰雷', '主教', '烈焰巫師', '龍魔導士', '夜光', '煉獄巫師', '凱內西斯', '伊利恩', '陰陽師', '幻獸師'],
-	'弓箭手': ['箭神', '神射手', '開拓者', '破風使者', '精靈遊俠', '狂豹獵人', '凱殷'],
-	'盜賊': ['夜使者', '暗影神偷', '影武者', '暗夜行者', '幻影俠盜', '傑諾', '卡蒂娜', '虎影'],
-	'海盜': ['拳霸', '槍神', '重砲指揮官', '閃雷悍將', '隱月', '機甲戰神', '傑諾', '天使破壞者', '亞克', '墨玄', '雪吉拉', '蒼龍俠客']
-};
-
-function 切換職業(jobname) {
-	職業.innerHTML = '';
-	if (jobname in job) {
-		let jobls = job[jobname];
-		for (let val of jobls) {
-			let op = document.createElement('option');
-			op.value = val;
-			op.innerHTML = val;
-			職業.append(op);
-		}
-	}
-}
-
 var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSplDOktwi4lBhEY3JqBbs5tdF4MrX_wBJ4u28c6IiO8xnhWPOc2FeSVBr7aNlfg4fVzdORQQ-qX0K-/pubhtml';
 var 巴哈討論串 = 'https://forum.gamer.com.tw/C.php?page=1&bsn=7650&snA=995533&to=';
 
@@ -50,9 +29,34 @@ function createa(str, style, width) {
 	return td;
 }
 
+var 職業表 = [];
+var 類型表 = {};
+var 群體表 = {};
+
+function 切換職業(類型名稱, 群體名稱) {
+	職業.innerHTML = '';
+	let cnt = 0;
+	for (let i = 0; i < 職業表.length; i++) {
+		if ((類型名稱 == '全部' || 職業表[i].類型 == 類型名稱 || (職業表[i].類型 == '傑諾' && (類型名稱 == '盜賊' || 類型名稱 == '海盜')))
+			&& (群體名稱 == '全部' || 職業表[i].群體 == 群體名稱)) {
+			let op = document.createElement('option');
+			op.value = 職業表[i].職業;
+			op.innerHTML = 職業表[i].職業;
+			職業.append(op);
+			cnt++;
+		}
+	}
+	if (cnt == 0) {
+		let op = document.createElement('option');
+		op.value = '沒有符合條件的職業';
+		op.innerHTML = '沒有符合條件的職業';
+		職業.append(op);
+	}
+}
+
 var 資料表 = [];
 var 地圖經驗表 = [];
-var 區域表 = [];
+var 區域表 = {};
 var 資料載入中 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
@@ -78,7 +82,7 @@ function 列出怪物隻數(jobname, zone) {
 	顯示 = [];
 	for (let i = 0; i < 資料表.length; i++) {
 		if (資料表[i].職業 == jobname
-			&& (zone == '全部區域' || zone == 資料表[i].區域)) {
+			&& (zone == '全部' || zone == 資料表[i].區域)) {
 			怪物隻數表.append(資料表[i].html);
 			顯示.push(資料表[i]);
 		} else {
@@ -269,16 +273,12 @@ function 排序(key) {
 }
 
 window.onload = async () => {
-	for (let key in job) {
-		let op = document.createElement('option');
-		op.value = key;
-		op.innerHTML = key;
-		職業群.append(op);
-	}
-	切換職業(職業群.value);
-
-	職業群.onchange = () => {
-		切換職業(職業群.value);
+	類型.onchange = () => {
+		切換職業(類型.value, 群體.value);
+		列出怪物隻數(職業.value, 區域.value);
+	};
+	群體.onchange = () => {
+		切換職業(類型.value, 群體.value);
 		列出怪物隻數(職業.value, 區域.value);
 	};
 	職業.onchange = () => {
@@ -315,7 +315,39 @@ window.onload = async () => {
 	let htmlstr = await promise(openfile, url);
 	let tbodyls = text2xml(htmlstr.slice(htmlstr.indexOf('<body'), htmlstr.indexOf('</body>') + '</body>'.length)).getElementsByTagName('body')[0].getElementsByTagName('tbody');
 
-	let trls = tbodyls[2].getElementsByTagName('tr');
+	let trls = tbodyls[3].getElementsByTagName('tr');
+	for (let i = 0; i < trls.length; i++) {
+		let tdls = trls[i].getElementsByTagName('td');
+		職業表[i] = {
+			'職業': tdls[0].innerHTML,
+			'類型': tdls[1].innerHTML,
+			'群體': tdls[2].innerHTML
+		};
+		類型表[職業表[i].類型] = true;
+		群體表[職業表[i].群體] = true;
+	}
+	職業表.shift();
+	// console.log(JSON.stringify(職業表));
+	// console.log(JSON.stringify(類型表));
+	// console.log(JSON.stringify(群體表));
+	for (let key in 類型表) {
+		if (key == '類型') key = '全部';
+		if (key == '傑諾') continue;
+		let op = document.createElement('option');
+		op.value = key;
+		op.innerHTML = key;
+		類型.append(op);
+	}
+	for (let key in 群體表) {
+		if (key == '群體') key = '全部';
+		let op = document.createElement('option');
+		op.value = key;
+		op.innerHTML = key;
+		群體.append(op);
+	}
+	切換職業(類型.value, 群體.value);
+
+	trls = tbodyls[2].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
 		let tdls = trls[i].getElementsByTagName('td');
 		地圖經驗表[i] = {
@@ -334,9 +366,10 @@ window.onload = async () => {
 		}
 		區域表[地圖經驗表[i].區域] = true;
 	}
+	地圖經驗表.shift();
 	// console.log(JSON.stringify(地圖經驗表));
 	for (let key in 區域表) {
-		if (key == '區域') key = '全部區域';
+		if (key == '區域') key = '全部';
 		let op = document.createElement('option');
 		op.value = key;
 		op.innerHTML = key;
