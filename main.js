@@ -326,7 +326,7 @@ window.onload = async () => {
 				'經驗': tdls[3].innerHTML
 			}
 		};
-		if (tdls[3].innerHTML != '') {
+		if (tdls[4].innerHTML != '') {
 			地圖經驗表[i].B怪 = {
 				'等級': tdls[4].innerHTML,
 				'經驗': tdls[5].innerHTML
