@@ -35,7 +35,7 @@ table {
 
 select,
 input[type=text] {
-	width    : 100px;
+	width    : 150px;
 	font-size: 15px;
 }
 
