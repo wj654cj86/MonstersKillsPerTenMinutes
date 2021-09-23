@@ -33,7 +33,9 @@ var 職業表 = [];
 var 類型表 = {};
 var 群體表 = {};
 
-function 切換職業(類型名稱, 群體名稱) {
+function 切換職業() {
+	let 類型名稱 = 類型.value;
+	let 群體名稱 = 群體.value;
 	職業.innerHTML = '';
 	let cnt = 0;
 	for (let i = 0; i < 職業表.length; i++) {
@@ -60,7 +62,7 @@ var 區域表 = {};
 var 資料載入中 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
-	td.colSpan = 11;
+	td.colSpan = 12;
 	td.innerHTML = '資料載入中......';
 	td.className = '偶數行';
 	tr.append(td);
@@ -69,7 +71,7 @@ var 資料載入中 = (() => {
 var 沒有資料列 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
-	td.colSpan = 11;
+	td.colSpan = 12;
 	td.innerHTML = '暫無資料';
 	td.className = '偶數行';
 	tr.append(td);
@@ -78,11 +80,13 @@ var 沒有資料列 = (() => {
 
 var 顯示 = [];
 var 怪物隻數隱藏表 = document.createElement('tbody');
-function 列出怪物隻數(jobname, zone) {
+function 列出怪物隻數() {
+	let 職業名稱 = 職業.value;
+	let 區域名稱 = 區域.value;
 	顯示 = [];
 	for (let i = 0; i < 資料表.length; i++) {
-		if (資料表[i].職業 == jobname
-			&& (zone == '全部' || zone == 資料表[i].區域)) {
+		if (資料表[i].職業 == 職業名稱
+			&& (區域名稱 == '全部' || 區域名稱 == 資料表[i].區域)) {
 			怪物隻數表.append(資料表[i].html);
 			顯示.push(資料表[i]);
 		} else {
@@ -274,18 +278,18 @@ function 排序(key) {
 
 window.onload = async () => {
 	類型.onchange = () => {
-		切換職業(類型.value, 群體.value);
-		列出怪物隻數(職業.value, 區域.value);
+		切換職業();
+		列出怪物隻數();
 	};
 	群體.onchange = () => {
-		切換職業(類型.value, 群體.value);
-		列出怪物隻數(職業.value, 區域.value);
+		切換職業();
+		列出怪物隻數();
 	};
 	職業.onchange = () => {
-		列出怪物隻數(職業.value, 區域.value);
+		列出怪物隻數();
 	};
 	區域.onchange = () => {
-		列出怪物隻數(職業.value, 區域.value);
+		列出怪物隻數();
 	};
 
 	let tr = document.createElement('tr');
@@ -313,8 +317,11 @@ window.onload = async () => {
 	怪物隻數表.append(資料載入中);
 
 	let htmlstr = await promise(openfile, url);
-	let tbodyls = text2xml(htmlstr.slice(htmlstr.indexOf('<body'), htmlstr.indexOf('</body>') + '</body>'.length)).getElementsByTagName('body')[0].getElementsByTagName('tbody');
+	let bodystr = htmlstr.slice(htmlstr.indexOf('<body'), htmlstr.indexOf('</body>') + '</body>'.length);
+	// console.log(bodystr);
+	// console.log(text2html(bodystr).getElementsByTagName('tbody'));
 
+	let tbodyls = text2html(bodystr).getElementsByTagName('body')[0].getElementsByTagName('tbody');
 	let trls = tbodyls[3].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
 		let tdls = trls[i].getElementsByTagName('td');
@@ -345,7 +352,7 @@ window.onload = async () => {
 		op.innerHTML = key;
 		群體.append(op);
 	}
-	切換職業(類型.value, 群體.value);
+	切換職業();
 
 	trls = tbodyls[2].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
@@ -423,5 +430,5 @@ window.onload = async () => {
 		顯示經驗總值();
 	};
 	怪物隻數隱藏表.append(資料載入中);
-	列出怪物隻數(職業.value, 區域.value);
+	列出怪物隻數();
 };

@@ -33,9 +33,12 @@ table {
 	color      : #ff8000;
 }
 
-select,
-input[type=text] {
+select {
 	width    : 170px;
+	font-size: 15px;
+}
+input[type=text] {
+	width    : 162px;
 	font-size: 15px;
 }
 

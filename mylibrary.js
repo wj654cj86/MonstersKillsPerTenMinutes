@@ -123,6 +123,11 @@ function xml2text(xml) {
 	return xsl.serializeToString(xml);
 }
 
+function text2html(text) {
+	let parser = new DOMParser();
+	return parser.parseFromString(text, "text/html");
+}
+
 function copyxml(xml) {
 	return text2xml(xml2text(xml));
 }
