@@ -55,6 +55,7 @@ function 切換職業() {
 	}
 	if (顯示職業.length == 0) {
 		職業.append(沒有符合職業);
+		顯示職業.push(沒有符合職業);
 	} else {
 		職業隱藏.append(沒有符合職業);
 	}
