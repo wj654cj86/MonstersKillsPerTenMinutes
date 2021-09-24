@@ -106,67 +106,7 @@ function 列出怪物隻數() {
 	顯示經驗總值();
 }
 
-var 等差經驗增量 = [
-	{ '等級': 40, '經驗': 0.7 },
-	{ '等級': 39, '經驗': 0.71 },
-	{ '等級': 38, '經驗': 0.72 },
-	{ '等級': 37, '經驗': 0.73 },
-	{ '等級': 36, '經驗': 0.74 },
-	{ '等級': 35, '經驗': 0.75 },
-	{ '等級': 34, '經驗': 0.76 },
-	{ '等級': 33, '經驗': 0.77 },
-	{ '等級': 32, '經驗': 0.78 },
-	{ '等級': 31, '經驗': 0.79 },
-	{ '等級': 30, '經驗': 0.8 },
-	{ '等級': 29, '經驗': 0.81 },
-	{ '等級': 28, '經驗': 0.82 },
-	{ '等級': 27, '經驗': 0.83 },
-	{ '等級': 26, '經驗': 0.84 },
-	{ '等級': 25, '經驗': 0.85 },
-	{ '等級': 24, '經驗': 0.86 },
-	{ '等級': 23, '經驗': 0.87 },
-	{ '等級': 22, '經驗': 0.88 },
-	{ '等級': 21, '經驗': 0.89 },
-	{ '等級': 19, '經驗': 0.95 },
-	{ '等級': 17, '經驗': 0.96 },
-	{ '等級': 15, '經驗': 0.97 },
-	{ '等級': 13, '經驗': 0.98 },
-	{ '等級': 11, '經驗': 0.99 },
-	{ '等級': 10, '經驗': 1 },
-	{ '等級': 5, '經驗': 1.05 },
-	{ '等級': 2, '經驗': 1.1 },
-	{ '等級': -1, '經驗': 1.2 },
-	{ '等級': -4, '經驗': 1.1 },
-	{ '等級': -9, '經驗': 1.05 },
-	{ '等級': -10, '經驗': 1 },
-	{ '等級': -11, '經驗': 0.99 },
-	{ '等級': -12, '經驗': 0.98 },
-	{ '等級': -13, '經驗': 0.97 },
-	{ '等級': -14, '經驗': 0.96 },
-	{ '等級': -15, '經驗': 0.95 },
-	{ '等級': -16, '經驗': 0.94 },
-	{ '等級': -17, '經驗': 0.93 },
-	{ '等級': -18, '經驗': 0.92 },
-	{ '等級': -19, '經驗': 0.91 },
-	{ '等級': -20, '經驗': 0.9 },
-	{ '等級': -21, '經驗': 0.7 },
-	{ '等級': -22, '經驗': 0.64 },
-	{ '等級': -23, '經驗': 0.62 },
-	{ '等級': -24, '經驗': 0.58 },
-	{ '等級': -25, '經驗': 0.54 },
-	{ '等級': -26, '經驗': 0.50 },
-	{ '等級': -27, '經驗': 0.46 },
-	{ '等級': -28, '經驗': 0.42 },
-	{ '等級': -29, '經驗': 0.38 },
-	{ '等級': -30, '經驗': 0.34 },
-	{ '等級': -31, '經驗': 0.3 },
-	{ '等級': -32, '經驗': 0.26 },
-	{ '等級': -33, '經驗': 0.22 },
-	{ '等級': -34, '經驗': 0.18 },
-	{ '等級': -35, '經驗': 0.14 },
-	{ '等級': -39, '經驗': 0.10 },
-	{ '等級': -301, '經驗': 0 }
-];
+var 等差經驗增量 = [];
 
 function 顯示經驗總值() {
 	let 等級 = 玩家等級.value;
@@ -291,6 +231,9 @@ window.onload = async () => {
 	區域.onchange = () => {
 		列出怪物隻數();
 	};
+	玩家等級.onchange = () => {
+		顯示經驗總值();
+	};
 
 	let tr = document.createElement('tr');
 	tr.append(createth('樓層', null, 70));
@@ -318,10 +261,9 @@ window.onload = async () => {
 
 	let htmlstr = await promise(openfile, url);
 	let bodystr = htmlstr.slice(htmlstr.indexOf('<body'), htmlstr.indexOf('</body>') + '</body>'.length);
-	// console.log(bodystr);
-	// console.log(text2html(bodystr).getElementsByTagName('tbody'));
-
 	let tbodyls = text2html(bodystr).getElementsByTagName('body')[0].getElementsByTagName('tbody');
+	// console.log(bodystr);
+
 	let trls = tbodyls[3].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
 		let tdls = trls[i].getElementsByTagName('td');
@@ -352,7 +294,6 @@ window.onload = async () => {
 		op.innerHTML = key;
 		群體.append(op);
 	}
-	切換職業();
 
 	trls = tbodyls[2].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
@@ -382,6 +323,16 @@ window.onload = async () => {
 		op.innerHTML = key;
 		區域.append(op);
 	}
+
+	trls = tbodyls[4].getElementsByTagName('tr');
+	for (let i = 0; i < trls.length; i++) {
+		let tdls = trls[i].getElementsByTagName('td');
+		等差經驗增量[i] = {
+			'等級': tdls[0].innerHTML,
+			'經驗': tdls[1].innerHTML
+		};
+	}
+	等差經驗增量.shift();
 
 	trls = tbodyls[0].getElementsByTagName('tr');
 	for (let i = 0; i < trls.length; i++) {
@@ -426,9 +377,8 @@ window.onload = async () => {
 		r.html = tr;
 	}
 	// console.log(JSON.stringify(資料表));
-	玩家等級.onchange = () => {
-		顯示經驗總值();
-	};
+
 	怪物隻數隱藏表.append(資料載入中);
+	切換職業();
 	列出怪物隻數();
 };
