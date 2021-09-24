@@ -33,27 +33,32 @@ var 職業表 = [];
 var 類型表 = {};
 var 群體表 = {};
 
+var 職業隱藏 = document.createElement('select');
+var 沒有符合職業 = (() => {
+	let op = document.createElement('option');
+	op.value = '沒有符合條件的職業';
+	op.innerHTML = '沒有符合條件的職業';
+	return op;
+})();
 function 切換職業() {
 	let 類型名稱 = 類型.value;
 	let 群體名稱 = 群體.value;
-	職業.innerHTML = '';
-	let cnt = 0;
+	let 顯示職業 = [];
 	for (let i = 0; i < 職業表.length; i++) {
 		if ((類型名稱 == '全部' || 職業表[i].類型 == 類型名稱 || (職業表[i].類型 == '傑諾' && (類型名稱 == '盜賊' || 類型名稱 == '海盜')))
 			&& (群體名稱 == '全部' || 職業表[i].群體 == 群體名稱)) {
-			let op = document.createElement('option');
-			op.value = 職業表[i].職業;
-			op.innerHTML = 職業表[i].職業;
-			職業.append(op);
-			cnt++;
+			職業.append(職業表[i].html);
+			顯示職業.push(職業表[i].html);
+		} else {
+			職業隱藏.append(職業表[i].html);
 		}
 	}
-	if (cnt == 0) {
-		let op = document.createElement('option');
-		op.value = '沒有符合條件的職業';
-		op.innerHTML = '沒有符合條件的職業';
-		職業.append(op);
+	if (顯示職業.length == 0) {
+		職業.append(沒有符合職業);
+	} else {
+		職業隱藏.append(沒有符合職業);
 	}
+	職業.value = 顯示職業[0].value;
 }
 
 var 資料表 = [];
@@ -272,6 +277,10 @@ window.onload = async () => {
 			'類型': tdls[1].innerHTML,
 			'群體': tdls[2].innerHTML
 		};
+		let op = document.createElement('option');
+		op.value = 職業表[i].職業;
+		op.innerHTML = 職業表[i].職業;
+		職業表[i].html = op;
 		類型表[職業表[i].類型] = true;
 		群體表[職業表[i].群體] = true;
 	}
