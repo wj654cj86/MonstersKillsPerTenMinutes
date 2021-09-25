@@ -1,16 +1,8 @@
-function createtd(str, style) {
+function creatediv(str, width) {
 	let td = document.createElement('td');
-	td.innerHTML = str;
-	if (typeof style != 'undefined')
-		td.className = style;
-	return td;
-}
-
-function creatediv(str, style, width) {
-	let td = createtd('', style);
 	let div = document.createElement('div');
 	div.innerHTML = str;
-	if (typeof width != 'undefined')
+	if (width !== undefined)
 		div.style.width = width + 'px';
 	td.append(div);
 	return td;
@@ -19,8 +11,8 @@ function creatediv(str, style, width) {
 var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSplDOktwi4lBhEY3JqBbs5tdF4MrX_wBJ4u28c6IiO8xnhWPOc2FeSVBr7aNlfg4fVzdORQQ-qX0K-/pubhtml';
 var 巴哈討論串 = 'https://forum.gamer.com.tw/C.php?page=1&bsn=7650&snA=995533&to=';
 
-function createa(str, style, width) {
-	let td = creatediv('', style, width);
+function createa(str, width) {
+	let td = creatediv('', width);
 	let div = td.getElementsByTagName('div')[0];
 	let a = document.createElement('a');
 	a.href = 巴哈討論串 + str.replace('★', '');
@@ -60,6 +52,7 @@ function 切換職業() {
 		職業隱藏.append(沒有符合職業);
 	}
 	職業.value = 顯示職業[0].value;
+	列出怪物隻數();
 }
 
 var 資料表 = [];
@@ -122,7 +115,7 @@ function 顯示經驗總值() {
 	}
 	玩家等級錯誤.innerHTML = '';
 	for (let i = 0; i < 顯示.length; i++) {
-		if (typeof 顯示[i].地圖經驗 == 'undefined') {
+		if (顯示[i].地圖經驗 === undefined) {
 			顯示[i].經驗html.innerHTML = '未有地圖經驗';
 			顯示[i].經驗值 = 0;
 			continue;
@@ -136,7 +129,7 @@ function 顯示經驗總值() {
 			}
 		}
 		let 經驗 = 顯示[i].地圖經驗.A怪.經驗 * 等差經驗增量[j].經驗;
-		if (typeof 顯示[i].地圖經驗.B怪 != 'undefined') {
+		if (顯示[i].地圖經驗.B怪 !== undefined) {
 			等級差 = 等級 - 顯示[i].地圖經驗.B怪.等級;
 			for (j = 0; j < 等差經驗增量.length; j++) {
 				if (等級差 >= 等差經驗增量[j].等級) {
@@ -174,14 +167,12 @@ let 順序 = {
 	'經驗值': true
 };
 let 按鈕 = {};
-function createth(str, style, width, cb) {
+function createth(str, width, cb) {
 	let th = document.createElement('th');
 	th.innerHTML = str + '  ';
-	if (typeof style != 'undefined')
-		th.className = style;
-	if (typeof width != 'undefined')
+	if (width !== undefined)
 		th.style.width = width + 'px';
-	if (typeof cb != 'undefined') {
+	if (cb !== undefined) {
 		let btn = document.createElement('button');
 		btn.innerHTML = '▲';
 		btn.onclick = cb;
@@ -223,45 +214,25 @@ function 排序(key) {
 }
 
 window.onload = async () => {
-	類型.onchange = () => {
-		切換職業();
-		列出怪物隻數();
-	};
-	群體.onchange = () => {
-		切換職業();
-		列出怪物隻數();
-	};
-	職業.onchange = () => {
-		列出怪物隻數();
-	};
-	區域.onchange = () => {
-		列出怪物隻數();
-	};
-	玩家等級.onchange = () => {
-		顯示經驗總值();
-	};
+	類型.onchange = 切換職業;
+	群體.onchange = 切換職業;
+	職業.onchange = 列出怪物隻數;
+	區域.onchange = 列出怪物隻數;
+	玩家等級.onchange = 顯示經驗總值;
 
 	let tr = document.createElement('tr');
-	tr.append(createth('樓層', null, 70));
-	tr.append(createth('職業', null, 90));
-	tr.append(createth('區域', null, 120, () => {
-		排序('區域');
-	}));
-	tr.append(createth('地圖', null, 200, () => {
-		排序('地圖');
-	}));
-	tr.append(createth('擊殺數', null, 100, () => {
-		排序('擊殺數');
-	}));
-	tr.append(createth('經驗值', null, 100, () => {
-		排序('經驗值');
-	}));
-	tr.append(createth('幽暗', null, 60));
-	tr.append(createth('影片', null, 60));
-	tr.append(createth('測試者', null, 150));
-	tr.append(createth('備註', null, 170));
-	tr.append(createth('版本', null, 200));
-	tr.append(createth('巴哈連結', null, 100));
+	tr.append(createth('樓層', 70));
+	tr.append(createth('職業', 90));
+	tr.append(createth('區域', 120, () => 排序('區域')));
+	tr.append(createth('地圖', 200, () => 排序('地圖')));
+	tr.append(createth('擊殺數', 100, () => 排序('擊殺數')));
+	tr.append(createth('經驗值', 100, () => 排序('經驗值')));
+	tr.append(createth('幽暗', 60));
+	tr.append(createth('影片', 60));
+	tr.append(createth('測試者', 150));
+	tr.append(createth('備註', 170));
+	tr.append(createth('版本', 200));
+	tr.append(createth('巴哈連結', 100));
 	怪物隻數表thead.append(tr);
 	怪物隻數表.append(資料載入中);
 
@@ -364,31 +335,31 @@ window.onload = async () => {
 		});
 
 		let r = 資料表[i];
-		if (typeof r.地圖經驗 == 'undefined')
+		if (r.地圖經驗 === undefined)
 			r.區域 = '資料庫未設置區域';
 		else
 			r.區域 = r.地圖經驗.區域;
 		let tr = document.createElement('tr');
-		tr.append(creatediv(r.樓層, null, 70));
-		tr.append(creatediv(r.職業, null, 90));
-		tr.append(creatediv(r.區域, null, 120));
-		tr.append(creatediv(r.地圖, null, 200));
-		tr.append(creatediv(r.擊殺數, null, 100));
+		tr.append(creatediv(r.樓層, 70));
+		tr.append(creatediv(r.職業, 90));
+		tr.append(creatediv(r.區域, 120));
+		tr.append(creatediv(r.地圖, 200));
+		tr.append(creatediv(r.擊殺數, 100));
 
-		r.經驗html = creatediv('', null, 100);
+		r.經驗html = creatediv('', 100);
 		tr.append(r.經驗html);
 
-		tr.append(creatediv(r.幽暗, null, 60));
-		tr.append(creatediv(r.影片, null, 60));
-		tr.append(creatediv(r.測試者, null, 150));
-		tr.append(creatediv(r.備註, null, 170));
-		tr.append(creatediv(r.版本, null, 200));
-		tr.append(createa(r.樓層, null, 100));
+		tr.append(creatediv(r.幽暗, 60));
+		tr.append(creatediv(r.影片, 60));
+		tr.append(creatediv(r.測試者, 150));
+		tr.append(creatediv(r.備註, 170));
+		tr.append(creatediv(r.版本, 200));
+		tr.append(createa(r.樓層, 100));
 		r.html = tr;
 	}
+	資料表.shift();
 	// console.log(JSON.stringify(資料表));
 
 	怪物隻數隱藏表.append(資料載入中);
 	切換職業();
-	列出怪物隻數();
 };
