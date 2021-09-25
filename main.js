@@ -8,7 +8,7 @@ function creatediv(str, width) {
 	return td;
 }
 
-var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSplDOktwi4lBhEY3JqBbs5tdF4MrX_wBJ4u28c6IiO8xnhWPOc2FeSVBr7aNlfg4fVzdORQQ-qX0K-/pubhtml';
+var url = 'https://script.google.com/macros/s/AKfycbyyRfcTGy6wZPm5AWonzjdYwW1b1w-uvTnNvjs-GsRIyFSKqtJTB5Uz18fTnUkS8IUm/exec';
 var 巴哈討論串 = 'https://forum.gamer.com.tw/C.php?page=1&bsn=7650&snA=995533&to=';
 
 function createa(str, width) {
@@ -161,11 +161,7 @@ function 重新顯示() {
 	奇偶數行顏色設定();
 }
 
-let 順序 = {
-	'地圖': true,
-	'擊殺數': true,
-	'經驗值': true
-};
+let 順序 = {};
 let 按鈕 = {};
 function createth(str, width, cb) {
 	let th = document.createElement('th');
@@ -177,6 +173,7 @@ function createth(str, width, cb) {
 		btn.innerHTML = '▲';
 		btn.onclick = cb;
 		按鈕[str] = btn;
+		順序[str] = true;
 		th.append(btn);
 	}
 	return th;
@@ -236,18 +233,16 @@ window.onload = async () => {
 	怪物隻數表thead.append(tr);
 	怪物隻數表.append(資料載入中);
 
-	let htmlstr = await promise(openfile, url);
-	let bodystr = htmlstr.slice(htmlstr.indexOf('<body'), htmlstr.indexOf('</body>') + '</body>'.length);
-	let tbodyls = text2html(bodystr).getElementsByTagName('body')[0].getElementsByTagName('tbody');
-	// console.log(bodystr);
+	let obj = JSON.parse(await promise(openfile, url));
+	// console.log(obj);
 
-	let trls = tbodyls[3].getElementsByTagName('tr');
-	for (let i = 0; i < trls.length; i++) {
-		let tdls = trls[i].getElementsByTagName('td');
+	let page = obj[3];
+	for (let i = 0; i < page.length; i++) {
+		let row = page[i];
 		職業表[i] = {
-			'職業': tdls[0].innerHTML,
-			'類型': tdls[1].innerHTML,
-			'群體': tdls[2].innerHTML
+			'職業': row[0],
+			'類型': row[1],
+			'群體': row[2]
 		};
 		let op = document.createElement('option');
 		op.value = 職業表[i].職業;
@@ -276,21 +271,21 @@ window.onload = async () => {
 		群體.append(op);
 	}
 
-	trls = tbodyls[2].getElementsByTagName('tr');
-	for (let i = 0; i < trls.length; i++) {
-		let tdls = trls[i].getElementsByTagName('td');
+	page = obj[2];
+	for (let i = 0; i < page.length; i++) {
+		let row = page[i];
 		地圖經驗表[i] = {
-			'區域': tdls[0].innerHTML,
-			'地圖': tdls[1].innerHTML,
+			'區域': row[0],
+			'地圖': row[1],
 			'A怪': {
-				'等級': tdls[2].innerHTML,
-				'經驗': tdls[3].innerHTML
+				'等級': row[2],
+				'經驗': row[3]
 			}
 		};
-		if (tdls[4].innerHTML != '') {
+		if (row[4] != '') {
 			地圖經驗表[i].B怪 = {
-				'等級': tdls[4].innerHTML,
-				'經驗': tdls[5].innerHTML
+				'等級': row[4],
+				'經驗': row[5]
 			}
 		}
 		區域表[地圖經驗表[i].區域] = true;
@@ -305,29 +300,29 @@ window.onload = async () => {
 		區域.append(op);
 	}
 
-	trls = tbodyls[4].getElementsByTagName('tr');
-	for (let i = 0; i < trls.length; i++) {
-		let tdls = trls[i].getElementsByTagName('td');
+	page = obj[4];
+	for (let i = 0; i < page.length; i++) {
+		let row = page[i];
 		等差經驗增量[i] = {
-			'等級': tdls[0].innerHTML,
-			'經驗': tdls[1].innerHTML
+			'等級': row[0],
+			'經驗': row[1]
 		};
 	}
 	等差經驗增量.shift();
 
-	trls = tbodyls[0].getElementsByTagName('tr');
-	for (let i = 0; i < trls.length; i++) {
-		let tdls = trls[i].getElementsByTagName('td');
+	page = obj[0];
+	for (let i = 0; i < page.length; i++) {
+		let row = page[i];
 		資料表[i] = {
-			'樓層': tdls[0].innerHTML,
-			'職業': tdls[1].innerHTML,
-			'地圖': tdls[2].innerHTML,
-			'擊殺數': tdls[3].innerHTML * 1,
-			'幽暗': tdls[4].innerHTML,
-			'影片': tdls[5].innerHTML,
-			'測試者': tdls[6].innerHTML,
-			'備註': tdls[7].innerHTML,
-			'版本': tdls[8].innerHTML
+			'樓層': row[0],
+			'職業': row[1],
+			'地圖': row[2],
+			'擊殺數': row[3] * 1,
+			'幽暗': row[4],
+			'影片': row[5],
+			'測試者': row[6],
+			'備註': row[7],
+			'版本': row[8]
 		};
 
 		資料表[i].地圖經驗 = 地圖經驗表.find((e) => {
