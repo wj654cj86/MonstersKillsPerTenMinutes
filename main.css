@@ -20,11 +20,11 @@ table {
 #主要表 {
 	vertical-align: top;
 	font-size     : 15px;
+	letter-spacing: 0.5px;
 }
 
 #職業選擇 {
-	width      : 250px;
-	line-height: 25px;
+	width: 250px;
 }
 
 #編輯選擇區 {
@@ -37,9 +37,27 @@ select {
 	width    : 170px;
 	font-size: 15px;
 }
+
 input[type=text] {
 	width    : 162px;
 	font-size: 15px;
+}
+
+#職業選擇 p {
+	margin-block-start: 15px;
+	margin-block-end  : 15px;
+}
+
+.首段 {
+	margin-block-start: 0px !important;
+}
+
+.末段 {
+	margin-block-end: 0px !important;
+}
+
+.結尾線 {
+	margin-block-end: 40px;
 }
 
 #玩家等級錯誤 {
