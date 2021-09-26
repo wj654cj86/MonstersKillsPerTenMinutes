@@ -1,18 +1,16 @@
-function creatediv(str, width) {
+var url = 'https://script.google.com/macros/s/AKfycbyyRfcTGy6wZPm5AWonzjdYwW1b1w-uvTnNvjs-GsRIyFSKqtJTB5Uz18fTnUkS8IUm/exec';
+var 巴哈討論串 = 'https://forum.gamer.com.tw/C.php?bsn=7650&snA=995533&to=';
+
+function creatediv(str) {
 	let td = document.createElement('td');
 	let div = document.createElement('div');
 	div.innerHTML = str;
-	if (width !== undefined)
-		div.style.width = width + 'px';
 	td.append(div);
 	return td;
 }
 
-var url = 'https://script.google.com/macros/s/AKfycbyyRfcTGy6wZPm5AWonzjdYwW1b1w-uvTnNvjs-GsRIyFSKqtJTB5Uz18fTnUkS8IUm/exec';
-var 巴哈討論串 = 'https://forum.gamer.com.tw/C.php?page=1&bsn=7650&snA=995533&to=';
-
-function createa(str, width) {
-	let td = creatediv('', width);
+function createa(str) {
+	let td = creatediv('');
 	let div = td.getElementsByTagName('div')[0];
 	let a = document.createElement('a');
 	a.href = 巴哈討論串 + str.replace('★', '');
@@ -63,7 +61,6 @@ var 資料載入中 = (() => {
 	let td = document.createElement('td');
 	td.colSpan = 12;
 	td.innerHTML = '資料載入中......';
-	td.className = '偶數行';
 	tr.append(td);
 	return tr;
 })();
@@ -72,7 +69,6 @@ var 沒有資料列 = (() => {
 	let td = document.createElement('td');
 	td.colSpan = 12;
 	td.innerHTML = '暫無資料';
-	td.className = '偶數行';
 	tr.append(td);
 	return tr;
 })();
@@ -101,7 +97,6 @@ function 列出怪物隻數() {
 		按鈕[k].innerHTML = '▲';
 		順序[k] = true;
 	}
-	奇偶數行顏色設定();
 	顯示經驗總值();
 }
 
@@ -143,37 +138,24 @@ function 顯示經驗總值() {
 	}
 }
 
-function 奇偶數行顏色設定() {
-	for (let i = 0; i < 顯示.length; i++) {
-		let r = 顯示[i].html;
-		if (i & 1) {
-			r.className = '奇數行';
-		} else {
-			r.className = '偶數行';
-		}
-	}
-}
-
 function 重新顯示() {
 	for (let i = 0; i < 顯示.length; i++) {
 		怪物隻數表.append(顯示[i].html);
 	}
-	奇偶數行顏色設定();
 }
 
 let 順序 = {};
 let 按鈕 = {};
-function createth(str, width, cb) {
+function createth(name, 排序按鈕) {
 	let th = document.createElement('th');
-	th.innerHTML = str + '  ';
-	if (width !== undefined)
-		th.style.width = width + 'px';
-	if (cb !== undefined) {
+	th.innerHTML = name;
+	if (排序按鈕 == true) {
+		th.innerHTML += ' ';
 		let btn = document.createElement('button');
 		btn.innerHTML = '▲';
-		btn.onclick = cb;
-		按鈕[str] = btn;
-		順序[str] = true;
+		btn.onclick = () => 排序(name);
+		按鈕[name] = btn;
+		順序[name] = true;
 		th.append(btn);
 	}
 	return th;
@@ -210,7 +192,25 @@ function 排序(key) {
 	重新顯示();
 }
 
+function 表格寬度設定() {
+	let 寬度 = [70, 90, 120, 200, 100, 100, 40, 40, 150, 170, 200, 100];
+	let outstr = '';
+	for (let i = 0; i < 寬度.length; i++) {
+		outstr += `#主要表 table th:nth-child(${i + 1}),`
+			+ `#主要表 table tr td:nth-child(${i + 1}) div`
+			+ `{width:${寬度[i]}px;}\n`;
+	}
+	let blob = new Blob([outstr], { type: 'text/css' });
+	let url = URL.createObjectURL(blob);
+	let link = document.createElement('link');
+	link.rel = 'stylesheet';
+	link.type = 'text/css';
+	link.href = url;
+	document.head.appendChild(link);
+}
+
 window.onload = async () => {
+	表格寬度設定();
 	類型.onchange = 切換職業;
 	群體.onchange = 切換職業;
 	職業.onchange = 列出怪物隻數;
@@ -218,18 +218,18 @@ window.onload = async () => {
 	玩家等級.onchange = 顯示經驗總值;
 
 	let tr = document.createElement('tr');
-	tr.append(createth('樓層', 70));
-	tr.append(createth('職業', 90));
-	tr.append(createth('區域', 120, () => 排序('區域')));
-	tr.append(createth('地圖', 200, () => 排序('地圖')));
-	tr.append(createth('擊殺數', 100, () => 排序('擊殺數')));
-	tr.append(createth('經驗值', 100, () => 排序('經驗值')));
-	tr.append(createth('幽暗', 60));
-	tr.append(createth('影片', 60));
-	tr.append(createth('測試者', 150));
-	tr.append(createth('備註', 170));
-	tr.append(createth('版本', 200));
-	tr.append(createth('巴哈連結', 100));
+	tr.append(createth('樓層'));
+	tr.append(createth('職業'));
+	tr.append(createth('區域', true));
+	tr.append(createth('地圖', true));
+	tr.append(createth('擊殺數', true));
+	tr.append(createth('經驗值', true));
+	tr.append(createth('幽暗'));
+	tr.append(createth('影片'));
+	tr.append(createth('測試者'));
+	tr.append(createth('備註'));
+	tr.append(createth('版本'));
+	tr.append(createth('巴哈連結'));
 	怪物隻數表thead.append(tr);
 	怪物隻數表.append(資料載入中);
 
@@ -335,21 +335,21 @@ window.onload = async () => {
 		else
 			r.區域 = r.地圖經驗.區域;
 		let tr = document.createElement('tr');
-		tr.append(creatediv(r.樓層, 70));
-		tr.append(creatediv(r.職業, 90));
-		tr.append(creatediv(r.區域, 120));
-		tr.append(creatediv(r.地圖, 200));
-		tr.append(creatediv(r.擊殺數, 100));
+		tr.append(creatediv(r.樓層));
+		tr.append(creatediv(r.職業));
+		tr.append(creatediv(r.區域));
+		tr.append(creatediv(r.地圖));
+		tr.append(creatediv(r.擊殺數));
 
-		r.經驗html = creatediv('', 100);
+		r.經驗html = creatediv('');
 		tr.append(r.經驗html);
 
-		tr.append(creatediv(r.幽暗, 60));
-		tr.append(creatediv(r.影片, 60));
-		tr.append(creatediv(r.測試者, 150));
-		tr.append(creatediv(r.備註, 170));
-		tr.append(creatediv(r.版本, 200));
-		tr.append(createa(r.樓層, 100));
+		tr.append(creatediv(r.幽暗));
+		tr.append(creatediv(r.影片));
+		tr.append(creatediv(r.測試者));
+		tr.append(creatediv(r.備註));
+		tr.append(creatediv(r.版本));
+		tr.append(createa(r.樓層));
 		r.html = tr;
 	}
 	資料表.shift();

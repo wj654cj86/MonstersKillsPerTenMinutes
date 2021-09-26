@@ -103,8 +103,16 @@ input[type=text] {
 }
 
 #主要表 table th button {
-	width: 35px;
+	width: 30px;
 	color: #134f5c;
+}
+
+#主要表 table tr:nth-child(odd) td {
+	background-color: #fff;
+}
+
+#主要表 table tr:nth-child(even) td {
+	background-color: #ebeff1;
 }
 
 #主要表 table td {
@@ -115,12 +123,4 @@ input[type=text] {
 	padding    : 0px;
 	overflow   : hidden;
 	white-space: nowrap;
-}
-
-.偶數行 td {
-	background-color: #fff;
-}
-
-.奇數行 td {
-	background-color: #ebeff1;
 }
