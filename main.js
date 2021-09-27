@@ -19,17 +19,19 @@ function createa(str) {
 	return td;
 }
 
+function createop(str) {
+	let op = document.createElement('option');
+	op.value = str;
+	op.innerHTML = str;
+	return op;
+}
+
 var 職業表 = [];
 var 類型表 = {};
 var 群體表 = {};
 
 var 職業隱藏 = document.createElement('select');
-var 沒有符合職業 = (() => {
-	let op = document.createElement('option');
-	op.value = '沒有符合條件的職業';
-	op.innerHTML = '沒有符合條件的職業';
-	return op;
-})();
+var 沒有符合職業 = createop('沒有符合條件的職業');
 function 切換職業() {
 	let 類型名稱 = 類型.value;
 	let 群體名稱 = 群體.value;
@@ -243,10 +245,7 @@ window.onload = async () => {
 			'類型': row[1],
 			'群體': row[2]
 		};
-		let op = document.createElement('option');
-		op.value = 職業表[i].職業;
-		op.innerHTML = 職業表[i].職業;
-		職業表[i].html = op;
+		職業表[i].html = createop(職業表[i].職業);
 		類型表[職業表[i].類型] = true;
 		群體表[職業表[i].群體] = true;
 	}
@@ -257,17 +256,11 @@ window.onload = async () => {
 	for (let key in 類型表) {
 		if (key == '類型') key = '全部';
 		if (key == '傑諾') continue;
-		let op = document.createElement('option');
-		op.value = key;
-		op.innerHTML = key;
-		類型.append(op);
+		類型.append(createop(key));
 	}
 	for (let key in 群體表) {
 		if (key == '群體') key = '全部';
-		let op = document.createElement('option');
-		op.value = key;
-		op.innerHTML = key;
-		群體.append(op);
+		群體.append(createop(key));
 	}
 
 	page = obj[2];
@@ -293,10 +286,7 @@ window.onload = async () => {
 	// console.log(JSON.stringify(地圖經驗表));
 	for (let key in 區域表) {
 		if (key == '區域') key = '全部';
-		let op = document.createElement('option');
-		op.value = key;
-		op.innerHTML = key;
-		區域.append(op);
+		區域.append(createop(key));
 	}
 
 	page = obj[4];
