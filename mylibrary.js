@@ -76,14 +76,14 @@ function sleep(ms) {
 
 function openfile(url, callback) {
 	let oReq = new XMLHttpRequest();
-	oReq.addEventListener("load", () => {
+	oReq.addEventListener("load", function () {
 		if (oReq.status != 404) {
 			callback(this.responseText);
 		} else {
 			callback('{}');
 		}
 	});
-	oReq.addEventListener("error", () => {
+	oReq.addEventListener("error", function () {
 		callback('{}');
 	});
 	oReq.open("GET", url);
@@ -93,14 +93,14 @@ function openfile(url, callback) {
 function openfilebinary(url, callback) {
 	let oReq = new XMLHttpRequest();
 	oReq.responseType = "arraybuffer";
-	oReq.addEventListener("load", () => {
+	oReq.addEventListener("load", function () {
 		if (oReq.status != 404) {
 			callback(new Uint8Array(this.response));
 		} else {
 			callback('{}');
 		}
 	});
-	oReq.addEventListener("error", () => {
+	oReq.addEventListener("error", function () {
 		callback('{}');
 	});
 	oReq.open("GET", url);
@@ -268,14 +268,14 @@ function sentpost(url, obj, callback) {
 	let oReq = new XMLHttpRequest();
 	oReq.open("POST", url, true);
 	oReq.setRequestHeader('Content-Type', 'application/json');
-	oReq.addEventListener("load", () => {
+	oReq.addEventListener("load", function () {
 		if (oReq.status != 404) {
 			callback(this.responseText);
 		} else {
 			callback('{}');
 		}
 	});
-	oReq.addEventListener("error", () => {
+	oReq.addEventListener("error", function () {
 		callback('{}');
 	});
 	oReq.send(JSON.stringify(obj));
