@@ -204,7 +204,6 @@ function 表格寬度設定() {
 	let url = URL.createObjectURL(blob);
 	let link = document.createElement('link');
 	link.rel = 'stylesheet';
-	link.type = 'text/css';
 	link.href = url;
 	document.head.appendChild(link);
 }
