@@ -44,8 +44,8 @@ input[type=text] {
 }
 
 #職業選擇 p {
-	margin-block-start: 15px;
-	margin-block-end  : 15px;
+	margin-block-start: 10px;
+	margin-block-end  : 10px;
 }
 
 .首段 {
@@ -57,15 +57,17 @@ input[type=text] {
 }
 
 .結尾線 {
-	margin-block-end: 40px;
+	margin-block-end: 20px;
 }
 
-#玩家等級錯誤 {
+#玩家等級錯誤,
+#掉寶率錯誤,
+#楓幣量錯誤 {
 	font-weight: bold;
 	color      : #f00;
 }
 
-#職業選擇 .橘色 {
+#職業選擇 .綠色 {
 	background-color: #134f5c;
 	border          : 1px solid #333;
 	color           : #fff;

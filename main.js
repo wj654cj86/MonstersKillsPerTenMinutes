@@ -57,7 +57,7 @@ var 地圖經驗表 = [];
 var 資料載入中 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
-	td.colSpan = 12;
+	td.colSpan = 13;
 	td.innerHTML = '資料載入中......';
 	tr.append(td);
 	return tr;
@@ -65,7 +65,7 @@ var 資料載入中 = (() => {
 var 沒有資料列 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
-	td.colSpan = 12;
+	td.colSpan = 13;
 	td.innerHTML = '暫無資料';
 	tr.append(td);
 	return tr;
@@ -95,25 +95,29 @@ function 列出怪物隻數() {
 		按鈕[k].innerHTML = '▲';
 		順序[k] = true;
 	}
-	顯示經驗總值();
+	顯示經驗與楓幣();
 }
 
-var 等差經驗增量 = [];
-
-function 顯示經驗總值() {
+function 顯示經驗與楓幣() {
 	let 等級 = 玩家等級.value;
 	if (isNaN(等級) || 等級 < 200) {
 		玩家等級錯誤.innerHTML = '玩家等級錯誤';
 		return;
 	}
 	玩家等級錯誤.innerHTML = '';
+	顯示經驗總值();
+	顯示楓幣總值();
+}
+
+var 等差經驗增量 = [];
+function 顯示經驗總值() {
+	let 等級 = 玩家等級.value;
 	for (let i = 0; i < 顯示.length; i++) {
 		if (顯示[i].地圖經驗 === undefined) {
 			顯示[i].經驗html.innerHTML = '未有地圖經驗';
 			顯示[i].經驗值 = 0;
 			continue;
 		}
-		// console.log(JSON.stringify(顯示[i].地圖經驗));
 		let 等級差 = 等級 - 顯示[i].地圖經驗.A怪.等級;
 		let j;
 		for (j = 0; j < 等差經驗增量.length; j++) {
@@ -133,6 +137,53 @@ function 顯示經驗總值() {
 		}
 		顯示[i].經驗值 = 經驗 * 顯示[i].擊殺數 / 1E8;
 		顯示[i].經驗html.innerHTML = (顯示[i].經驗值).toFixed(2) + '億';
+	}
+}
+
+var 等差楓幣增量 = [];
+function 顯示楓幣總值() {
+	let 等級 = 玩家等級.value;
+	let 掉寶百分比 = 掉寶率.value;
+	if (isNaN(掉寶百分比) || 掉寶百分比 < 0) {
+		掉寶率錯誤.innerHTML = '掉寶率錯誤';
+		return;
+	}
+	掉寶率錯誤.innerHTML = '';
+	let 實際掉寶率 = 0.6 * (1 + 掉寶百分比 / 100);
+	if (實際掉寶率 > 1)
+		實際掉寶率 = 1;
+	let 楓幣百分比 = 楓幣量.value;
+	if (isNaN(楓幣百分比) || 楓幣百分比 < 0) {
+		楓幣量錯誤.innerHTML = '楓幣量錯誤';
+		return;
+	}
+	楓幣量錯誤.innerHTML = '';
+
+	for (let i = 0; i < 顯示.length; i++) {
+		if (顯示[i].地圖經驗 === undefined) {
+			顯示[i].楓幣html.innerHTML = '未有怪物等級';
+			顯示[i].楓幣量 = 0;
+			continue;
+		}
+		let 等級差 = 等級 - 顯示[i].地圖經驗.A怪.等級;
+		let j;
+		for (j = 0; j < 等差楓幣增量.length; j++) {
+			if (等級差 >= 等差楓幣增量[j].等級) {
+				break;
+			}
+		}
+		let 楓幣 = 7.5 * 顯示[i].地圖經驗.A怪.等級 * 等差楓幣增量[j].楓幣;
+		if (顯示[i].地圖經驗.B怪 !== undefined) {
+			等級差 = 等級 - 顯示[i].地圖經驗.B怪.等級;
+			for (j = 0; j < 等差楓幣增量.length; j++) {
+				if (等級差 >= 等差楓幣增量[j].等級) {
+					break;
+				}
+			}
+			楓幣 = (楓幣 + 7.5 * 顯示[i].地圖經驗.B怪.等級 * 等差楓幣增量[j].楓幣) / 2;
+		}
+		顯示[i].楓幣量 = 楓幣 * 顯示[i].擊殺數 * 實際掉寶率 * (1 + 楓幣百分比 / 100) / 1E4;
+		顯示[i].楓幣html.innerHTML = (顯示[i].楓幣量).toFixed(0) + '萬';
 	}
 }
 
@@ -191,7 +242,7 @@ function 排序(key) {
 }
 
 function 表格寬度設定() {
-	let 寬度 = [70, 90, 120, 200, 100, 100, 40, 40, 150, 170, 200, 100];
+	let 寬度 = [70, 90, 120, 200, 100, 100, 100, 40, 40, 150, 170, 200, 100];
 	let outstr = '';
 	for (let i = 0; i < 寬度.length; i++) {
 		outstr += `#主要表 table th:nth-child(${i + 1}),`
@@ -209,7 +260,9 @@ window.onload = async () => {
 	群體.onchange = 切換職業;
 	職業.onchange = 列出怪物隻數;
 	區域.onchange = 列出怪物隻數;
-	玩家等級.onchange = 顯示經驗總值;
+	玩家等級.onchange = 顯示經驗與楓幣;
+	掉寶率.onchange = 顯示經驗與楓幣;
+	楓幣量.onchange = 顯示經驗與楓幣;
 
 	let tr = document.createElement('tr');
 	tr.append(createth('樓層'));
@@ -218,6 +271,7 @@ window.onload = async () => {
 	tr.append(createth('地圖', true));
 	tr.append(createth('擊殺數', true));
 	tr.append(createth('經驗值', true));
+	tr.append(createth('楓幣量', true));
 	tr.append(createth('幽暗'));
 	tr.append(createth('影片'));
 	tr.append(createth('測試者'));
@@ -295,6 +349,16 @@ window.onload = async () => {
 	}
 	等差經驗增量.shift();
 
+	page = obj[1];
+	for (let i = 0; i < page.length; i++) {
+		let row = page[i];
+		等差楓幣增量[i] = {
+			'等級': row[0],
+			'楓幣': row[1]
+		};
+	}
+	等差楓幣增量.shift();
+
 	page = obj[0];
 	for (let i = 0; i < page.length; i++) {
 		let row = page[i];
@@ -328,6 +392,9 @@ window.onload = async () => {
 
 		r.經驗html = creatediv('');
 		tr.append(r.經驗html);
+
+		r.楓幣html = creatediv('');
+		tr.append(r.楓幣html);
 
 		tr.append(creatediv(r.幽暗));
 		tr.append(creatediv(r.影片));
