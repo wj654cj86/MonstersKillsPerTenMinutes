@@ -27,9 +27,6 @@ function createop(str) {
 }
 
 var 職業表 = [];
-var 類型表 = {};
-var 群體表 = {};
-
 var 職業隱藏 = document.createElement('select');
 var 沒有符合職業 = createop('沒有符合條件的職業');
 function 切換職業() {
@@ -57,7 +54,6 @@ function 切換職業() {
 
 var 資料表 = [];
 var 地圖經驗表 = [];
-var 區域表 = {};
 var 資料載入中 = (() => {
 	let tr = document.createElement('tr');
 	let td = document.createElement('td');
@@ -151,7 +147,7 @@ let 按鈕 = {};
 function createth(name, 排序按鈕) {
 	let th = document.createElement('th');
 	th.innerHTML = name;
-	if (排序按鈕 == true) {
+	if (排序按鈕 === true) {
 		th.innerHTML += ' ';
 		let btn = document.createElement('button');
 		btn.innerHTML = '▲';
@@ -202,12 +198,9 @@ function 表格寬度設定() {
 			+ `#主要表 table tr td:nth-child(${i + 1}) div`
 			+ `{width:${寬度[i]}px;}\n`;
 	}
-	let blob = new Blob([outstr], { type: 'text/css' });
-	let url = URL.createObjectURL(blob);
-	let link = document.createElement('link');
-	link.rel = 'stylesheet';
-	link.href = url;
-	document.head.appendChild(link);
+	let style = document.createElement('style');
+	style.innerHTML = outstr;
+	document.head.append(style);
 }
 
 window.onload = async () => {
@@ -238,6 +231,8 @@ window.onload = async () => {
 	// console.log(obj);
 
 	let page = obj[3];
+	let 類型表 = {};
+	let 群體表 = {};
 	for (let i = 0; i < page.length; i++) {
 		let row = page[i];
 		職業表[i] = {
@@ -264,6 +259,7 @@ window.onload = async () => {
 	}
 
 	page = obj[2];
+	let 區域表 = {};
 	for (let i = 0; i < page.length; i++) {
 		let row = page[i];
 		地圖經驗表[i] = {

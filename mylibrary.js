@@ -1,9 +1,9 @@
-function paddingLeft(str, lenght) {
+function paddingLeft(str, length) {
 	str += '';
-	if (str.length >= lenght)
+	if (str.length >= length)
 		return str;
 	else
-		return paddingLeft("0" + str, lenght);
+		return paddingLeft("0" + str, length);
 }
 
 function setCookie(cname, cvalue) {
