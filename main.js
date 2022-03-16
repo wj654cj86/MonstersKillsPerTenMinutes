@@ -105,13 +105,39 @@ function 顯示經驗與楓幣() {
 		return;
 	}
 	玩家等級錯誤.innerHTML = '';
+	let 小時 = 時間小時.value;
+	if (isNaN(小時) || 小時 < 0) {
+		時間小時錯誤.innerHTML = '小時錯誤';
+		return;
+	}
+	時間小時錯誤.innerHTML = '';
+	let 分鐘 = 時間分鐘.value;
+	if (isNaN(分鐘) || 分鐘 < 0) {
+		時間分鐘錯誤.innerHTML = '分鐘錯誤';
+		return;
+	}
+	時間分鐘錯誤.innerHTML = '';
+	顯示擊殺總值();
 	顯示經驗總值();
 	顯示楓幣總值();
+}
+
+function 顯示擊殺總值() {
+	let 時間倍率 = (時間小時.value * 60 + 時間分鐘.value) / 10;
+	for (let i = 0; i < 顯示.length; i++) {
+		顯示[i].擊殺html.innerHTML = 顯示[i].時間擊殺數 = 顯示[i].擊殺數 * 時間倍率;
+	}
 }
 
 var 等差經驗增量 = [];
 function 顯示經驗總值() {
 	let 等級 = 玩家等級.value;
+	let 經驗百分比 = 經驗量.value;
+	if (isNaN(經驗百分比) || 經驗百分比 < 0) {
+		經驗量錯誤.innerHTML = '經驗量錯誤';
+		return;
+	}
+	經驗量錯誤.innerHTML = '';
 	for (let i = 0; i < 顯示.length; i++) {
 		if (顯示[i].地圖經驗 === undefined) {
 			顯示[i].經驗html.innerHTML = '未有地圖經驗';
@@ -135,7 +161,7 @@ function 顯示經驗總值() {
 			}
 			經驗 = (經驗 + 顯示[i].地圖經驗.B怪.經驗 * 等差經驗增量[j].經驗) / 2;
 		}
-		顯示[i].經驗值 = 經驗 * 顯示[i].擊殺數 / 1E8;
+		顯示[i].經驗值 = 經驗 * 顯示[i].時間擊殺數 * (1 + 經驗百分比 / 100) / 1E8;
 		顯示[i].經驗html.innerHTML = (顯示[i].經驗值).toFixed(2) + '億';
 	}
 }
@@ -182,7 +208,7 @@ function 顯示楓幣總值() {
 			}
 			楓幣 = (楓幣 + 7.5 * 顯示[i].地圖經驗.B怪.等級 * 等差楓幣增量[j].楓幣) / 2;
 		}
-		顯示[i].楓幣量 = 楓幣 * 顯示[i].擊殺數 * 實際掉寶率 * (1 + 楓幣百分比 / 100) / 1E4;
+		顯示[i].楓幣量 = 楓幣 * 實際掉寶率 * (1 + 楓幣百分比 / 100) * 顯示[i].時間擊殺數 / 1E4;
 		顯示[i].楓幣html.innerHTML = (顯示[i].楓幣量).toFixed(0) + '萬';
 	}
 }
@@ -260,7 +286,10 @@ window.onload = async () => {
 	群體.onchange = 切換職業;
 	職業.onchange = 列出怪物隻數;
 	區域.onchange = 列出怪物隻數;
+	時間小時.onchange = 顯示經驗與楓幣;
+	時間分鐘.onchange = 顯示經驗與楓幣;
 	玩家等級.onchange = 顯示經驗與楓幣;
+	經驗量.onchange = 顯示經驗與楓幣;
 	掉寶率.onchange = 顯示經驗與楓幣;
 	楓幣量.onchange = 顯示經驗與楓幣;
 
@@ -388,7 +417,9 @@ window.onload = async () => {
 		tr.append(creatediv(r.職業));
 		tr.append(creatediv(r.區域));
 		tr.append(creatediv(r.地圖));
-		tr.append(creatediv(r.擊殺數));
+
+		r.擊殺html = creatediv('');
+		tr.append(r.擊殺html);
 
 		r.經驗html = creatediv('');
 		tr.append(r.經驗html);

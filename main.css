@@ -60,9 +60,7 @@ input[type=text] {
 	margin-block-end: 20px;
 }
 
-#玩家等級錯誤,
-#掉寶率錯誤,
-#楓幣量錯誤 {
+.錯誤 {
 	font-weight: bold;
 	color      : #f00;
 }
