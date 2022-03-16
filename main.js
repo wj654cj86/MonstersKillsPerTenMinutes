@@ -123,7 +123,7 @@ function 顯示經驗與楓幣() {
 }
 
 function 顯示擊殺總值() {
-	let 時間倍率 = (時間小時.value * 60 + 時間分鐘.value) / 10;
+	let 時間倍率 = (時間小時.value * 60 + 時間分鐘.value * 1) / 10;
 	for (let i = 0; i < 顯示.length; i++) {
 		顯示[i].擊殺html.innerHTML = 顯示[i].時間擊殺數 = 顯示[i].擊殺數 * 時間倍率;
 	}
