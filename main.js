@@ -28,27 +28,29 @@ function createop(str) {
 
 var 職業表 = [];
 var 職業隱藏 = document.createElement('select');
-var 沒有符合職業 = createop('沒有符合條件的職業');
+var 顯示職業 = [];
+var 沒有符合職業 = { html: createop('沒有符合條件的職業') };
 function 切換職業() {
 	let 類型名稱 = 類型.value;
 	let 群體名稱 = 群體.value;
-	let 顯示職業 = [];
+	顯示職業 = [];
 	for (let i = 0; i < 職業表.length; i++) {
-		if ((類型名稱 == '全部' || 職業表[i].類型 == 類型名稱 || (職業表[i].類型 == '傑諾' && (類型名稱 == '盜賊' || 類型名稱 == '海盜')))
-			&& (群體名稱 == '全部' || 職業表[i].群體 == 群體名稱)) {
+		if (職業表[i].職業 == '全部顯示' || ((類型名稱 == '全部' || 職業表[i].類型 == 類型名稱 || (職業表[i].類型 == '傑諾' && (類型名稱 == '盜賊' || 類型名稱 == '海盜')))
+			&& (群體名稱 == '全部' || 職業表[i].群體 == 群體名稱))) {
 			職業.append(職業表[i].html);
-			顯示職業.push(職業表[i].html);
+			顯示職業.push(職業表[i]);
 		} else {
 			職業隱藏.append(職業表[i].html);
 		}
 	}
-	if (顯示職業.length == 0) {
-		職業.append(沒有符合職業);
-		顯示職業.push(沒有符合職業);
+	if (顯示職業.length == 1) {
+		職業.append(沒有符合職業.html);
+		顯示職業 = [沒有符合職業];
+		職業隱藏.append(職業表[0].html);
 	} else {
-		職業隱藏.append(沒有符合職業);
+		職業隱藏.append(沒有符合職業.html);
 	}
-	職業.value = 顯示職業[0].value;
+	職業.value = 顯示職業[0].html.value;
 	列出怪物隻數();
 }
 
@@ -78,8 +80,11 @@ function 列出怪物隻數() {
 	let 區域名稱 = 區域.value;
 	顯示 = [];
 	for (let i = 0; i < 資料表.length; i++) {
-		if (資料表[i].職業 == 職業名稱
-			&& (區域名稱 == '全部' || 區域名稱 == 資料表[i].區域)) {
+		if ((資料表[i].職業 == 職業名稱 || (職業名稱 == '全部顯示' && (() => {
+			for (let v of 顯示職業)
+				if (資料表[i].職業 == v.職業) return true;
+			return false;
+		})())) && (區域名稱 == '全部' || 區域名稱 == 資料表[i].區域)) {
 			怪物隻數表.append(資料表[i].html);
 			顯示.push(資料表[i]);
 		} else {
@@ -323,11 +328,11 @@ window.onload = async () => {
 			'類型': row[1],
 			'群體': row[2]
 		};
+		if (職業表[i].職業 == '職業') 職業表[i].職業 = '全部顯示';
 		職業表[i].html = createop(職業表[i].職業);
 		類型表[職業表[i].類型] = true;
 		群體表[職業表[i].群體] = true;
 	}
-	職業表.shift();
 	// console.log(JSON.stringify(職業表));
 	// console.log(JSON.stringify(類型表));
 	// console.log(JSON.stringify(群體表));
