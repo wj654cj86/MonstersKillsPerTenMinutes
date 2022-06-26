@@ -168,8 +168,8 @@ function svgtoimg(svg, callback) {
 function svgtopngurl(svg, callback) {
 	let img = svgtoimg(svg, () => {
 		let c = document.createElement("canvas");
-		c.setAttribute('width', img.naturalWidth);
-		c.setAttribute('height', img.naturalHeight);
+		c.width = img.naturalWidth;
+		c.height = img.naturalHeight;
 		let ctx = c.getContext("2d");
 		ctx.drawImage(img, 0, 0);
 		c.toBlob((blob) => {
@@ -183,8 +183,8 @@ function pngtobase64(imgsrc, callback) {
 	let img = new Image();
 	img.onload = () => {
 		let c = document.createElement("canvas");
-		c.setAttribute('width', img.naturalWidth);
-		c.setAttribute('height', img.naturalHeight);
+		c.width = img.naturalWidth;
+		c.height = img.naturalHeight;
 		let ctx = c.getContext("2d");
 		ctx.drawImage(img, 0, 0);
 		callback(c.toDataURL());
