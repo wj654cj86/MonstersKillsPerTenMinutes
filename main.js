@@ -9,6 +9,16 @@ function creatediv(str) {
 	return td;
 }
 
+function createshow(obj, name) {
+	let div = creatediv('');
+	Object.defineProperty(obj, name, {
+		set: function (str) {
+			div.innerHTML = str;
+		}
+	});
+	return div;
+}
+
 function createa(str) {
 	let td = creatediv('');
 	let div = td.getElementsByTagName('div')[0];
@@ -130,7 +140,7 @@ function 顯示經驗與楓幣() {
 function 顯示擊殺總值() {
 	let 時間倍率 = (時間小時.value * 60 + 時間分鐘.value * 1) / 10;
 	for (let i = 0; i < 顯示.length; i++) {
-		顯示[i].擊殺html.innerHTML = 顯示[i].時間擊殺數 = (顯示[i].擊殺數 * 時間倍率).toFixed(0);
+		顯示[i].擊殺數顯示 = 顯示[i].時間擊殺數 = (顯示[i].擊殺數 * 時間倍率).toFixed(0);
 	}
 }
 
@@ -145,7 +155,7 @@ function 顯示經驗總值() {
 	經驗量錯誤.innerHTML = '';
 	for (let i = 0; i < 顯示.length; i++) {
 		if (顯示[i].地圖經驗 === undefined) {
-			顯示[i].經驗html.innerHTML = '未有地圖經驗';
+			顯示[i].經驗值顯示 = '未有地圖經驗';
 			顯示[i].經驗值 = 0;
 			continue;
 		}
@@ -167,7 +177,7 @@ function 顯示經驗總值() {
 			經驗 = (經驗 + 顯示[i].地圖經驗.B怪.經驗 * 等差經驗增量[j].經驗) / 2;
 		}
 		顯示[i].經驗值 = 經驗 * 顯示[i].時間擊殺數 * (1 + 經驗百分比 / 100) / 1E8;
-		顯示[i].經驗html.innerHTML = (顯示[i].經驗值).toFixed(2) + '億';
+		顯示[i].經驗值顯示 = (顯示[i].經驗值).toFixed(2) + '億';
 	}
 }
 
@@ -192,7 +202,7 @@ function 顯示楓幣總值() {
 
 	for (let i = 0; i < 顯示.length; i++) {
 		if (顯示[i].地圖經驗 === undefined) {
-			顯示[i].楓幣html.innerHTML = '未有怪物等級';
+			顯示[i].楓幣量顯示 = '未有怪物等級';
 			顯示[i].楓幣量 = 0;
 			continue;
 		}
@@ -214,7 +224,7 @@ function 顯示楓幣總值() {
 			楓幣 = (楓幣 + 7.5 * 顯示[i].地圖經驗.B怪.等級 * 等差楓幣增量[j].楓幣) / 2;
 		}
 		顯示[i].楓幣量 = 楓幣 * 實際掉寶率 * (1 + 楓幣百分比 / 100) * 顯示[i].時間擊殺數 / 1E4;
-		顯示[i].楓幣html.innerHTML = (顯示[i].楓幣量).toFixed(0) + '萬';
+		顯示[i].楓幣量顯示 = (顯示[i].楓幣量).toFixed(0) + '萬';
 	}
 }
 
@@ -422,16 +432,9 @@ window.onload = async () => {
 		tr.append(creatediv(r.職業));
 		tr.append(creatediv(r.區域));
 		tr.append(creatediv(r.地圖));
-
-		r.擊殺html = creatediv('');
-		tr.append(r.擊殺html);
-
-		r.經驗html = creatediv('');
-		tr.append(r.經驗html);
-
-		r.楓幣html = creatediv('');
-		tr.append(r.楓幣html);
-
+		tr.append(createshow(r,'擊殺數顯示'));
+		tr.append(createshow(r,'經驗值顯示'));
+		tr.append(createshow(r,'楓幣量顯示'));
 		tr.append(creatediv(r.幽暗));
 		tr.append(creatediv(r.影片));
 		tr.append(creatediv(r.測試者));
