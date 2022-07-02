@@ -115,12 +115,18 @@ function xml2text(xml) {
 	return (new XMLSerializer()).serializeToString(xml);
 }
 
-function nodetext2svgnode(text) {
+function text2html(text) {
+	let t = document.createElement('template');
+	t.innerHTML = text;
+	return t.content.firstChild;
+}
+
+function text2svg(text) {
 	return (new DOMParser()).parseFromString(
 		`<?xml version="1.0" encoding="UTF-8"?>
 			<svg xmlns="http://www.w3.org/2000/svg"
 				 xmlns:xlink="http://www.w3.org/1999/xlink">${text}
-			</svg>`, "image/svg+xml").querySelector('svg').childNodes[0];
+			</svg>`, "image/svg+xml").querySelector('svg').firstChild;
 }
 
 function copyxml(xml) {
@@ -169,14 +175,13 @@ function svgtoimg(svg, callback) {
 	let blob = new Blob([svgstring], { type: 'image/svg+xml' });
 	let url = URL.createObjectURL(blob);
 	img.onload = () => {
-		callback();
+		callback(img);
 	};
 	img.src = url;
-	return img;
 }
 
 function svgtopngurl(svg, callback) {
-	let img = svgtoimg(svg, () => {
+	svgtoimg(svg, (img) => {
 		let c = document.createElement("canvas");
 		c.width = img.naturalWidth;
 		c.height = img.naturalHeight;
