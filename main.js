@@ -1,9 +1,10 @@
-var url = 'https://script.google.com/macros/s/AKfycbyyRfcTGy6wZPm5AWonzjdYwW1b1w-uvTnNvjs-GsRIyFSKqtJTB5Uz18fTnUkS8IUm/exec';
-var 巴哈討論串 = 'https://forum.gamer.com.tw/C.php?bsn=7650&snA=995533&to=';
+let url = 'https://script.google.com/macros/s/AKfycbyyRfcTGy6wZPm5AWonzjdYwW1b1w-uvTnNvjs-GsRIyFSKqtJTB5Uz18fTnUkS8IUm/exec';
+let 巴哈討論串 = 'https://forum.gamer.com.tw/C.php?bsn=7650&snA=995533&to=';
 
-function creatediv(str) {
-	return text2html(`<td><div>${str}</div></td>`);
-}
+let creatediv = str => text2html(`<td><div>${str}</div></td>`);
+let createa = str => text2html(`<td><div><a href="${巴哈討論串 + str}">移至${str}樓</a></div></td>`);
+let createop = str => text2html(`<option value="${str}">${str}</option>`);
+let createlongtd = str => text2html(`<tr><td colspan="13">${str}</td></tr>`);
 
 function createshow(obj, name) {
 	let div = creatediv('');
@@ -15,22 +16,10 @@ function createshow(obj, name) {
 	return div;
 }
 
-function createa(str) {
-	return text2html(`<td><div><a href="${巴哈討論串 + str}">移至${str}樓</a></div></td>`);
-}
-
-function createop(str) {
-	return text2html(`<option value="${str}">${str}</option>`);
-}
-
-function createlongtd(str) {
-	return text2html(`<tr><td colspan="13">${str}</td></tr>`);
-}
-
-var 職業表 = [];
-var 職業隱藏 = document.createElement('select');
-var 顯示職業 = [];
-var 沒有符合職業 = { html: createop('沒有符合條件的職業') };
+let 職業表 = [];
+let 職業隱藏 = document.createElement('select');
+let 顯示職業 = [];
+let 沒有符合職業 = { html: createop('沒有符合條件的職業') };
 function 切換職業() {
 	let 類型名稱 = 類型.value;
 	let 群體名稱 = 群體.value;
@@ -55,13 +44,13 @@ function 切換職業() {
 	列出怪物隻數();
 }
 
-var 資料表 = [];
-var 地圖經驗表 = [];
-var 資料載入中 = createlongtd('資料載入中......');
-var 沒有資料列 = createlongtd('暫無資料');
+let 資料表 = [];
+let 地圖經驗表 = [];
+let 資料載入中 = createlongtd('資料載入中......');
+let 沒有資料列 = createlongtd('暫無資料');
 
-var 顯示 = [];
-var 怪物隻數隱藏表 = document.createElement('tbody');
+let 顯示 = [];
+let 怪物隻數隱藏表 = document.createElement('tbody');
 function 列出怪物隻數() {
 	let 職業名稱 = 職業.value;
 	let 區域名稱 = 區域.value;
@@ -121,7 +110,7 @@ function 顯示擊殺總值() {
 	}
 }
 
-var 等差經驗增量 = [];
+let 等差經驗增量 = [];
 function 顯示經驗總值() {
 	let 等級 = 玩家等級.value;
 	let 經驗百分比 = 經驗量.value;
@@ -158,7 +147,7 @@ function 顯示經驗總值() {
 	}
 }
 
-var 等差楓幣增量 = [];
+let 等差楓幣增量 = [];
 function 顯示楓幣總值() {
 	let 等級 = 玩家等級.value;
 	let 掉寶百分比 = 掉寶率.value;
@@ -234,24 +223,10 @@ function 排序(key) {
 	}
 	if (順序[key]) {
 		按鈕[key].innerHTML = '▲';
-		顯示.sort((a, b) => {
-			if (a[key] < b[key])
-				return -1;
-			else if (a[key] > b[key])
-				return 1;
-			else
-				return 0;
-		});
+		顯示.sort((a, b) => a[key] - b[key]);
 	} else {
 		按鈕[key].innerHTML = '▼';
-		顯示.sort((a, b) => {
-			if (a[key] < b[key])
-				return 1;
-			else if (a[key] > b[key])
-				return -1;
-			else
-				return 0;
-		});
+		顯示.sort((a, b) => b[key] - a[key]);
 	}
 	重新顯示();
 }
@@ -297,7 +272,7 @@ window.onload = async () => {
 	怪物隻數表thead.append(tr);
 	怪物隻數表.append(資料載入中);
 
-	let obj = JSON.parse(await promise(openfile, url));
+	let obj = await loadfile('json', url);
 	// console.log(obj);
 
 	let page = obj[3];

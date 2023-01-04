@@ -88,13 +88,10 @@ input[type=text] {
 
 #主要表 table th,
 #主要表 table td {
-	font-size     : 15px;
-	border        : 1px solid #333;
-	padding-left  : 1px;
-	padding-right : 1px;
-	padding-top   : 1px;
-	padding-bottom: 1px;
-	white-space   : nowrap;
+	font-size  : 15px;
+	border     : 1px solid #333;
+	padding    : 1px;
+	white-space: nowrap;
 }
 
 #主要表 table th {
