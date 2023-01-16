@@ -34,26 +34,28 @@ table {
 }
 
 select {
-	width    : 170px;
-	font-size: 15px;
+	width      : 170px;
+	font-size  : 15px;
+	font-family: Consolas, Microsoft JhengHei;
 }
 
 input[type=text] {
-	width    : 162px;
-	font-size: 15px;
+	width      : 162px;
+	font-size  : 15px;
+	font-family: Consolas, Microsoft JhengHei;
 }
 
-#職業選擇 p {
+.說明 p {
 	margin-block-start: 10px;
 	margin-block-end  : 10px;
 }
 
-.首段 {
-	margin-block-start: 0px !important;
+.說明 p:first-child {
+	margin-block-start: 0px;
 }
 
-.末段 {
-	margin-block-end: 0px !important;
+.說明 p:last-child {
+	margin-block-end: 0px;
 }
 
 .結尾線 {
