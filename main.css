@@ -24,7 +24,7 @@ table {
 }
 
 #職業選擇 {
-	width: 250px;
+	width: 300px;
 }
 
 #編輯選擇區 {
@@ -111,7 +111,11 @@ input[type=text] {
 }
 
 #主要表 table tr:nth-child(even) td {
-	background-color: #ebeff1;
+	background-color: hsl(240, 100%, 95%);
+}
+
+#主要表 table tr:hover td {
+	background-color: hsl(120, 100%, 85%);
 }
 
 #主要表 table td {

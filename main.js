@@ -197,147 +197,145 @@ function 表格寬度設定() {
 	document.head.append(text2html(`<style>${outstr}</style>`));
 }
 
-window.onload = async () => {
-	表格寬度設定();
-	類型.onchange = 切換職業;
-	群體.onchange = 切換職業;
-	職業.onchange = 列出怪物隻數;
-	區域.onchange = 列出怪物隻數;
-	時間小時.onchange = 顯示經驗與楓幣;
-	時間分鐘.onchange = 顯示經驗與楓幣;
-	玩家等級.onchange = 顯示經驗與楓幣;
-	經驗量.onchange = 顯示經驗與楓幣;
-	掉寶率.onchange = 顯示經驗與楓幣;
-	楓幣量.onchange = 顯示經驗與楓幣;
+表格寬度設定();
+類型.onchange = 切換職業;
+群體.onchange = 切換職業;
+職業.onchange = 列出怪物隻數;
+區域.onchange = 列出怪物隻數;
+時間小時.onchange = 顯示經驗與楓幣;
+時間分鐘.onchange = 顯示經驗與楓幣;
+玩家等級.onchange = 顯示經驗與楓幣;
+經驗量.onchange = 顯示經驗與楓幣;
+掉寶率.onchange = 顯示經驗與楓幣;
+楓幣量.onchange = 顯示經驗與楓幣;
+
+let tr = document.createElement('tr');
+tr.append(createth('樓層'));
+tr.append(createth('職業'));
+tr.append(createth('區域', true));
+tr.append(createth('地圖', true));
+tr.append(createth('擊殺數', true));
+tr.append(createth('經驗值', true));
+tr.append(createth('楓幣量', true));
+tr.append(createth('幽暗'));
+tr.append(createth('影片'));
+tr.append(createth('測試者'));
+tr.append(createth('備註'));
+tr.append(createth('版號'));
+tr.append(createth('版本'));
+tr.append(createth('巴哈連結'));
+怪物隻數表thead.append(tr);
+怪物隻數表.append(資料載入中);
+
+let obj = await loadfile('json', url);
+// console.log(obj);
+
+let 類型表 = {};
+let 群體表 = {};
+obj[3].forEach((row, i) => {
+	職業表[i] = {
+		'職業': row[0],
+		'類型': row[1],
+		'群體': row[2]
+	};
+	if (職業表[i].職業 == '職業') 職業表[i].職業 = '全部顯示';
+	職業表[i].html = createop(職業表[i].職業);
+	類型表[職業表[i].類型] = true;
+	群體表[職業表[i].群體] = true;
+});
+// console.log(職業表);
+// console.log(類型表);
+// console.log(群體表);
+類型表.forEach((v, key) => {
+	if (key == '類型') key = '全部';
+	if (key == '傑諾') return;
+	類型.append(createop(key));
+});
+群體表.forEach((v, key) => {
+	if (key == '群體') key = '全部';
+	群體.append(createop(key));
+});
+
+let 區域表 = {};
+obj[2].forEach((row, i) => {
+	地圖經驗表[i] = {
+		'區域': row[0],
+		'地圖': row[1],
+		'A怪': {
+			'等級': row[2],
+			'經驗': row[3]
+		}
+	};
+	if (row[4] != '') {
+		地圖經驗表[i].B怪 = {
+			'等級': row[4],
+			'經驗': row[5]
+		}
+	}
+	區域表[地圖經驗表[i].區域] = true;
+});
+地圖經驗表.shift();
+// console.log(地圖經驗表);
+// console.log(區域表);
+區域表.forEach((v, key) => {
+	if (key == '區域') key = '全部';
+	區域.append(createop(key));
+});
+
+等差經驗增量 = obj[4].map(row => {
+	return {
+		'等級': row[0],
+		'經驗': row[1]
+	}
+});
+等差經驗增量.shift();
+// console.log(等差經驗增量);
+
+等差楓幣增量 = obj[1].map(row => {
+	return {
+		'等級': row[0],
+		'楓幣': row[1]
+	}
+});
+等差楓幣增量.shift();
+// console.log(等差楓幣增量);
+
+obj[0].forEach((row, i) => {
+	let r = 資料表[i] = {
+		'樓層': row[0],
+		'職業': row[1],
+		'地圖': row[2],
+		'擊殺數': row[3],
+		'幽暗': row[4],
+		'影片': row[5],
+		'測試者': row[6],
+		'備註': row[7]
+	};
+	r.地圖經驗 = 地圖經驗表.find(e => e.地圖 == r.地圖);
+	r.區域 = r.地圖經驗 === undefined ? '資料庫未設置區域' : r.地圖經驗.區域;
+	let 版本說明 = row[8].replace(/ \/ /g, '/').split('/');
+	r.版號 = 版本說明[0];
+	r.版本 = 版本說明.length == 2 ? 版本說明[1] : '';
 
 	let tr = document.createElement('tr');
-	tr.append(createth('樓層'));
-	tr.append(createth('職業'));
-	tr.append(createth('區域', true));
-	tr.append(createth('地圖', true));
-	tr.append(createth('擊殺數', true));
-	tr.append(createth('經驗值', true));
-	tr.append(createth('楓幣量', true));
-	tr.append(createth('幽暗'));
-	tr.append(createth('影片'));
-	tr.append(createth('測試者'));
-	tr.append(createth('備註'));
-	tr.append(createth('版號'));
-	tr.append(createth('版本'));
-	tr.append(createth('巴哈連結'));
-	怪物隻數表thead.append(tr);
-	怪物隻數表.append(資料載入中);
+	tr.append(creatediv(r.樓層));
+	tr.append(creatediv(r.職業));
+	tr.append(creatediv(r.區域));
+	tr.append(creatediv(r.地圖));
+	tr.append(createshow(r, '擊殺數顯示'));
+	tr.append(createshow(r, '經驗值顯示'));
+	tr.append(createshow(r, '楓幣量顯示'));
+	tr.append(creatediv(r.幽暗));
+	tr.append(creatediv(r.影片));
+	tr.append(creatediv(r.測試者));
+	tr.append(creatediv(r.備註));
+	tr.append(creatediv(r.版號));
+	tr.append(creatediv(r.版本));
+	tr.append(createa(r.樓層));
+	r.html = tr;
+});
+資料表.shift();
+// console.log(資料表);
 
-	let obj = await loadfile('json', url);
-	// console.log(obj);
-
-	let 類型表 = {};
-	let 群體表 = {};
-	obj[3].forEach((row, i) => {
-		職業表[i] = {
-			'職業': row[0],
-			'類型': row[1],
-			'群體': row[2]
-		};
-		if (職業表[i].職業 == '職業') 職業表[i].職業 = '全部顯示';
-		職業表[i].html = createop(職業表[i].職業);
-		類型表[職業表[i].類型] = true;
-		群體表[職業表[i].群體] = true;
-	});
-	// console.log(職業表);
-	// console.log(類型表);
-	// console.log(群體表);
-	類型表.forEach((v, key) => {
-		if (key == '類型') key = '全部';
-		if (key == '傑諾') return;
-		類型.append(createop(key));
-	});
-	群體表.forEach((v, key) => {
-		if (key == '群體') key = '全部';
-		群體.append(createop(key));
-	});
-
-	let 區域表 = {};
-	obj[2].forEach((row, i) => {
-		地圖經驗表[i] = {
-			'區域': row[0],
-			'地圖': row[1],
-			'A怪': {
-				'等級': row[2],
-				'經驗': row[3]
-			}
-		};
-		if (row[4] != '') {
-			地圖經驗表[i].B怪 = {
-				'等級': row[4],
-				'經驗': row[5]
-			}
-		}
-		區域表[地圖經驗表[i].區域] = true;
-	});
-	地圖經驗表.shift();
-	// console.log(地圖經驗表);
-	// console.log(區域表);
-	區域表.forEach((v, key) => {
-		if (key == '區域') key = '全部';
-		區域.append(createop(key));
-	});
-
-	等差經驗增量 = obj[4].map(row => {
-		return {
-			'等級': row[0],
-			'經驗': row[1]
-		}
-	});
-	等差經驗增量.shift();
-	// console.log(等差經驗增量);
-
-	等差楓幣增量 = obj[1].map(row => {
-		return {
-			'等級': row[0],
-			'楓幣': row[1]
-		}
-	});
-	等差楓幣增量.shift();
-	// console.log(等差楓幣增量);
-
-	obj[0].forEach((row, i) => {
-		let r = 資料表[i] = {
-			'樓層': row[0],
-			'職業': row[1],
-			'地圖': row[2],
-			'擊殺數': row[3],
-			'幽暗': row[4],
-			'影片': row[5],
-			'測試者': row[6],
-			'備註': row[7]
-		};
-		r.地圖經驗 = 地圖經驗表.find(e => e.地圖 == r.地圖);
-		r.區域 = r.地圖經驗 === undefined ? '資料庫未設置區域' : r.地圖經驗.區域;
-		let 版本說明 = row[8].replace(/ \/ /g, '/').split('/');
-		r.版號 = 版本說明[0];
-		r.版本 = 版本說明.length == 2 ? 版本說明[1] : '';
-
-		let tr = document.createElement('tr');
-		tr.append(creatediv(r.樓層));
-		tr.append(creatediv(r.職業));
-		tr.append(creatediv(r.區域));
-		tr.append(creatediv(r.地圖));
-		tr.append(createshow(r, '擊殺數顯示'));
-		tr.append(createshow(r, '經驗值顯示'));
-		tr.append(createshow(r, '楓幣量顯示'));
-		tr.append(creatediv(r.幽暗));
-		tr.append(creatediv(r.影片));
-		tr.append(creatediv(r.測試者));
-		tr.append(creatediv(r.備註));
-		tr.append(creatediv(r.版號));
-		tr.append(creatediv(r.版本));
-		tr.append(createa(r.樓層));
-		r.html = tr;
-	});
-	資料表.shift();
-	// console.log(資料表);
-
-	怪物隻數隱藏表.append(資料載入中);
-	切換職業();
-};
+怪物隻數隱藏表.append(資料載入中);
+切換職業();
