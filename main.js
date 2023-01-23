@@ -54,10 +54,12 @@ let 怪物隻數隱藏表 = document.createElement('tbody');
 function 列出怪物隻數() {
 	let 職業名稱 = 職業.value;
 	let 區域名稱 = 區域.value;
+	let 版號名稱 = 版號.value;
 	顯示 = [];
 	資料表.forEach(v => {
 		if ((v.職業 == 職業名稱 || (職業名稱 == '全部顯示' && 顯示職業.find(e => e.職業 == v.職業) !== undefined))
-			&& (區域名稱 == '全部' || 區域名稱 == v.區域)) {
+			&& (區域名稱 == '全部' || 區域名稱 == v.區域)
+			&& (版號名稱 == '全部' || (版號名稱 == '舊版本' && v.版號 == "") || 版號名稱 == v.版號)) {
 			怪物隻數表.append(v.html);
 			顯示.push(v);
 		} else {
@@ -191,7 +193,7 @@ function 排序(key) {
 }
 
 function 表格寬度設定() {
-	let 寬度 = [50, 100, 120, 200, 100, 100, 100, 40, 40, 150, 150, 50, 150, 100];
+	let 寬度 = [50, 100, 120, 200, 100, 100, 100, 40, 40, 150, 150, 80, 150, 100];
 	let outstr = '';
 	寬度.forEach((v, i) => outstr += `#主要表 table th:nth-child(${i + 1}),#主要表 table tr td:nth-child(${i + 1}) div{width:${v}px;}\n`);
 	document.head.append(text2html(`<style>${outstr}</style>`));
@@ -202,6 +204,7 @@ function 表格寬度設定() {
 群體.onchange = 切換職業;
 職業.onchange = 列出怪物隻數;
 區域.onchange = 列出怪物隻數;
+版號.onchange = 列出怪物隻數;
 時間小時.onchange = 顯示經驗與楓幣;
 時間分鐘.onchange = 顯示經驗與楓幣;
 玩家等級.onchange = 顯示經驗與楓幣;
@@ -221,7 +224,7 @@ tr.append(createth('幽暗'));
 tr.append(createth('影片'));
 tr.append(createth('測試者'));
 tr.append(createth('備註'));
-tr.append(createth('版號'));
+tr.append(createth('版號', true));
 tr.append(createth('版本'));
 tr.append(createth('巴哈連結'));
 怪物隻數表thead.append(tr);
@@ -300,6 +303,8 @@ obj[2].forEach((row, i) => {
 等差楓幣增量.shift();
 // console.log(等差楓幣增量);
 
+let 版號表 = {};
+
 obj[0].forEach((row, i) => {
 	let r = 資料表[i] = {
 		'樓層': row[0],
@@ -315,6 +320,7 @@ obj[0].forEach((row, i) => {
 	r.區域 = r.地圖經驗 === undefined ? '資料庫未設置區域' : r.地圖經驗.區域;
 	let 版本說明 = row[8].replace(/ \/ /g, '/').split('/');
 	r.版號 = 版本說明[0];
+	版號表[r.版號] = true;
 	r.版本 = 版本說明.length == 2 ? 版本說明[1] : '';
 
 	let tr = document.createElement('tr');
@@ -336,6 +342,17 @@ obj[0].forEach((row, i) => {
 });
 資料表.shift();
 // console.log(資料表);
+let 版號arr = [];
+版號表.forEach((v, key) => {
+	if (key == "版本") return;
+	if (key == "") return;
+	版號arr.push(key);
+});
+版號arr.sort((a, b) => a == b ? 0 : a > b ? 1 : -1);
+版號arr.unshift("全部", "舊版本");
+版號arr.forEach(v => 版號.append(createop(v)));
+
+// console.log(版號表);
 
 怪物隻數隱藏表.append(資料載入中);
 切換職業();
