@@ -123,7 +123,8 @@ input[type=text] {
 }
 
 #主要表 table td div {
-	padding    : 0px;
-	overflow   : hidden;
-	white-space: nowrap;
+	padding      : 0px;
+	overflow     : hidden;
+	white-space  : nowrap;
+	text-overflow: ellipsis;
 }

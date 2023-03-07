@@ -1,6 +1,29 @@
-Number.prototype.padStart = function (...args) {
-	return this.toString().padStart(...args);
+Number.prototype.padStart = function (...args) { return this.toString().padStart(...args); };
+Number.prototype.padEnd = function (...args) { return this.toString().padEnd(...args); };
+
+String.prototype.forEach = function (cb = () => { }) { this.split(/(?:)/u).forEach(cb); };
+
+Array.prototype.random = function () { return this.length <= 0 ? null : this[Math.floor(Math.random() * this.length)]; };
+Array.prototype.draw = function () { return this.length <= 0 ? null : this.splice(Math.floor(Math.random() * this.length), 1)[0]; };
+
+Object.prototype.entries = function () { return Object.entries(this); };
+Object.prototype.forEach = function (cb = () => { }) { this.entries().forEach(([k, v]) => cb(v, k)); };
+Object.prototype.some = function (cb = () => { }) { return this.entries().some(([k, v]) => cb(v, k)); };
+
+Audio.prototype.replay = function () {
+	this.currentTime = 0;
+	this.play();
 };
+
+function range(f, l) {
+	let a = [];
+	if (f < l) { for (let i = f; i <= l; i++) { a.push(i); } }
+	else { for (let i = f; i >= l; i--) { a.push(i); } }
+	return a;
+}
+let range_nf = (f, l) => range(f, l).slice(1);
+let range_nl = (f, l) => range(f, l).slice(0, -1);
+let range_nfl = (f, l) => range(f, l).slice(1, -1);
 
 function setCookie(key, value) {
 	let d = new Date();
@@ -14,15 +37,11 @@ function getCookie(key) {
 }
 
 function obj2get(obj) {
-	let get = Object.entries(obj).map(([k, v]) => k + '=' + v).join('&');
+	let get = new URLSearchParams(obj).toString();
 	return get != '' ? '?' + get : '';
 }
 
-function url2obj() {
-	let strUrl = location.search;
-	if (strUrl.indexOf('?') == -1) return {};
-	return Object.fromEntries(strUrl.split("?")[1].split("&").map(v => v.trim().split('=')));
-}
+let url2obj = () => Object.fromEntries(new URLSearchParams(location.search));
 
 function obj2url(obj) {
 	window.history.pushState({}, 0, location.href.split('?')[0] + obj2get(obj) + location.hash);
@@ -37,7 +56,7 @@ let sentpost = (url, obj) => fetch(url, {
 	body: JSON.stringify(obj),
 	headers: { 'content-type': 'application/json' },
 	method: 'POST'
-}).then(response => response.text());
+}).then(r => r.text());
 
 let text2xml = text => (new DOMParser()).parseFromString(text, "text/xml");
 let xml2text = xml => (new XMLSerializer()).serializeToString(xml);
@@ -49,13 +68,10 @@ function text2html(text) {
 	return t.content.firstChild;
 }
 
-function text2svg(text) {
-	return (new DOMParser()).parseFromString(
-		`<?xml version="1.0" encoding="UTF-8"?>
-			<svg xmlns="http://www.w3.org/2000/svg"
-				 xmlns:xlink="http://www.w3.org/1999/xlink">${text}
-			</svg>`, "image/svg+xml").querySelector('svg').firstChild;
-}
+let text2svg = text => (new DOMParser()).parseFromString(
+	`<?xml version="1.0" encoding="UTF-8"?>`
+	+ `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">${text.replace(/^\s*<\?[\w\s\"\'\.\-\=]*\?>\s*/g, '')}</svg>`,
+	"image/svg+xml").querySelector('svg').firstChild;
 
 let getimgsize = src => new Promise((res, rej) => {
 	let img = new Image();
@@ -71,27 +87,19 @@ let loadimg = src => new Promise((res, rej) => {
 	img.src = src;
 });
 
-function svgtourl(svg) {
-	let svgstring = xml2text(svg);
-	let blob = new Blob([svgstring], { type: 'image/svg+xml' });
-	return URL.createObjectURL(blob);
+function imgtocanvas(img) {
+	let canvas = text2html(`<canvas width="${img.naturalWidth}" height="${img.naturalHeight}"/>`);
+	let ctx = canvas.getContext("2d");
+	ctx.drawImage(img, 0, 0);
+	return canvas;
 }
 
+let svgtexttourl = text => URL.createObjectURL(new Blob([text], { type: 'image/svg+xml' }));
+let svgtourl = svg => svgtexttourl(xml2text(svg));
 let svgtoimg = svg => loadimg(svgtourl(svg));
 
-let svgtopngurl = svg => svgtoimg(svg).then(img => {
-	let canvas = text2html(`<canvas width="${img.naturalWidth}" height="${img.naturalHeight}"/>`);
-	let ctx = canvas.getContext("2d");
-	ctx.drawImage(img, 0, 0);
-	return new Promise(r => canvas.toBlob(blob => r(URL.createObjectURL(blob))));
-});
-
-let pngtobase64 = src => loadimg(src).then(img => {
-	let canvas = text2html(`<canvas width="${img.naturalWidth}" height="${img.naturalHeight}"/>`);
-	let ctx = canvas.getContext("2d");
-	ctx.drawImage(img, 0, 0);
-	return canvas.toDataURL();
-});
+let svgtopngurl = svg => svgtoimg(svg).then(img => new Promise(r => imgtocanvas(img).toBlob(blob => r(URL.createObjectURL(blob)))));
+let pngtobase64 = src => loadimg(src).then(img => imgtocanvas(img).toDataURL());
 
 function startDownload(url, name) {
 	let a = document.createElement('a');
